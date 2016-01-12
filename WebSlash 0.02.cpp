@@ -27,7 +27,7 @@ int readLevel(int lvlNum, char level[MAX_H][MAX_W]){
     FILE *levelData;    
     
     if (lvlNum == 1)
-        levelData = fopen("lvlFiles/lvl1.txt","r");
+        levelData = fopen("lvlFiles/lvl.txt","r");
         
     for (int i = 0; i < MAX_H; i++){
         fgets(level[i],MAX_W, levelData);

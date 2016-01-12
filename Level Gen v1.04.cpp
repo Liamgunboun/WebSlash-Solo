@@ -260,7 +260,7 @@ void drawBoard(lvl *level){
 
 void writeToFile(lvl *level){
 	FILE *lvlFile;	
-	lvlFile = fopen("lvlFiles/lvl1.txt","w");
+	lvlFile = fopen("lvlFiles/lvl.txt","w");
 	for (int i = 0; i < MAX_H; i++){
 			for (int j = 0; j < MAX_W; j++){
 					fprintf(lvlFile,"%c",level->nodeGet(i,j));	
