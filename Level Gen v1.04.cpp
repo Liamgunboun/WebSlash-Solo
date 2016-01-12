@@ -10,7 +10,7 @@
 #define MAX_H 40
 #define MAX_W 59
 
-#define CHANCE_LOW 1000
+#define CHANCE_LOW 500
 #define CHANCE_MED 150
 #define CHANCE_HIGH 100
 
@@ -98,6 +98,8 @@ int recurClear(lvl *level, int h, int w, int x, int y, int doH, int showGen){
 	
 	if(rb(1,CHANCE_HIGH)==1)		
 		level->nodeSet(y+h,x+w, '$');
+	else if(rb(1,CHANCE_LOW)==1)		
+		level->nodeSet(y+h,x+w, '*');
 	else if(rb(1,CHANCE_MED)==1)		
 		level->nodeSet(y+h,x+w, 'o');
 	else		
