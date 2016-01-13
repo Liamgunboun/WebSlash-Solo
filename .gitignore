@@ -48,4 +48,6 @@ Temporary Items
 lvl.txt
 *.exe
 *.exe
+*.h.gch
+
 
