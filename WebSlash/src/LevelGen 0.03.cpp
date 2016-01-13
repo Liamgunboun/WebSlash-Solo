@@ -203,7 +203,9 @@ int lvlGen (lvl *level){
 		}
 	}
 
-	printf("\tBefore playing a new level must be generated \n \tDo you want to be shown the generation process? y/n \n\t(warning, a lot of flashing will occur)\n ");
+	printf("\t\tBefore playing a new level must be generated \n \t\tDo you want to be shown the generation process? y/n \n\t\t(warning, a lot of flashing will occur)\n\n ");
+	printf("\t\t(Also due to some hidden bug, this will fail 1/10 times)\n");
+	printf("\t\t(If it happens just restart the program and all will be well)\n");
 	temp=getch();
 	if (temp == 'y') showGen = 1;
 

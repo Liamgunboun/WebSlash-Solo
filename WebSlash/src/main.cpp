@@ -39,12 +39,13 @@ typedef struct{
 int readLevel( char level[MAX_H][MAX_W]){
     FILE *levelData;
     levelData = fopen("../lvlFiles/lvl.txt","r");
-
+    if (levelData == NULL) return 0;
     for (int i = 0; i < MAX_H; i++){
         fgets(level[i],MAX_W, levelData);
         fscanf(levelData,"\n");
     }
     fclose(levelData);
+    return 1;
 }
 
 int drawNMES (char level[MAX_H][MAX_W], NME *ogres, int numNMES){
@@ -107,6 +108,15 @@ int useInp(NME *player, int inp, char level[MAX_H][MAX_W]){
     return 1;
 }
 
+void saveLvl(char level[MAX_H][MAX_W]){
+	FILE *lvlFile;
+	lvlFile = fopen("../lvlFiles/lvl.txt","w");
+	for (int i = 0; i < MAX_H; i++){
+            fprintf(lvlFile,"%s\n",level[i]);
+		}
+    fclose(lvlFile);
+}
+
 int movNME (NME *ogre, NME *player, char level[MAX_H][MAX_W]){
 
     if(abs(ogre->x-player->x) > abs(ogre->y-player->y)) {
@@ -138,7 +148,7 @@ int movNMES (NME *ogres, int numNMES, NME *player, char level[MAX_H][MAX_W]){
 int setStart (NME *player, char level[MAX_H][MAX_W]){
     for (int j=0;j<MAX_H;j++){
         for (int i=0;i<MAX_W;i++){
-            if (level[j][i] == 'e'){
+            if (level[j][i] == 'e' || level[j][i] == '&'){
                 player->y = j;
                 player->x = i;
                 return 1;
@@ -162,12 +172,14 @@ int setNMES (NME *ogres, char level[MAX_H][MAX_W]){
     return numOgres;
 }
 
+
+
 int main(){
 
     NME player;
     NME dumbOgres[MAX_NMES];
     int numNMES;
-    int inp;
+    int inp = 0;
     lvl levl;
     char level[MAX_H][MAX_W];
     player.x = 19;
@@ -180,23 +192,49 @@ int main(){
   	RECT r;
  	GetWindowRect(console, &r);
 	MoveWindow(console, r.left, r.top, 1280, 720, TRUE);
-	SetWindowText(console,"Web Slash v0.03");
+	SetWindowText(console,"Web Slash v0.05");
 	//------------------------------------
 
-    genNewLvl(&levl);
-    writeToFile(&levl);
 
-    readLevel(level);
+
+    while (inp != 'n' && inp != 'c'){
+        printf("\t\t\t     Greetings\n");
+        printf("\t\t\tWelcome To Web Slash\n");
+        printf("\t\t   New Game: n | Continue Game: c\n\n\n");
+        inp = getch();
+    }
+
+    if (inp == 'n'){
+        genNewLvl(&levl);
+        writeToFile(&levl);
+    }
+    if(!readLevel(level)){
+        printf("\t    No existing level found, generate one now? y/n \n\n");
+        inp = getch();
+        if (inp == 'n'){
+           inp = 27;
+           printf("\t\t\t  Have a nice day!\n\n\n\n\n");
+        }
+    }
+
     setStart (&player, level);
     numNMES = setNMES (dumbOgres, level);
 
-    do{
+    while(inp!=27){
 		drawBoard(level, player, dumbOgres, numNMES);
         inp=getch();
         useInp(&player, inp, level);
         movNMES(dumbOgres, numNMES, &player, level);
-    }while(inp!=27);
+    }
 
+    system("CLS");
+    printf("\t\tWould you like to save your game? y/n")
+;    inp=getch();
+    if (inp == 'y'){
+        saveLvl(level);
+        printf("\n\n\n\t\t\tLevel Saved!\n\n\n\n\n");
+        getch();
+    }
 
 return 0;
 }
