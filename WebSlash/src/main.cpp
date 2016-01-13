@@ -1,3 +1,4 @@
+#define _WIN32_WINNT 0x0500
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -48,13 +49,13 @@ int readLevel( char level[MAX_H][MAX_W]){
     return 1;
 }
 
-int drawNMES (char level[MAX_H][MAX_W], NME *ogres, int numNMES){
+void drawNMES (char level[MAX_H][MAX_W], NME *ogres, int numNMES){
     for (int i=0;i<numNMES;i++){
         level[ogres[i].y][ogres[i].x] = 'o';
     }
 }
 
-int drawPlayer (char level[MAX_H][MAX_W], NME player){
+void drawPlayer (char level[MAX_H][MAX_W], NME player){
     level[player.y][player.x] = '&';
 }
 
@@ -103,8 +104,6 @@ int useInp(NME *player, int inp, char level[MAX_H][MAX_W]){
 
     if (inp == 224)
         movChar(player, getch(), level);
-
-
     return 1;
 }
 
@@ -131,11 +130,10 @@ int movNME (NME *ogre, NME *player, char level[MAX_H][MAX_W]){
         else if (ogre->y < player->y)
             movChar(ogre, DOWN_ARROW_KEY, level);
     }
-
     return 1;
 }
 
-int movNMES (NME *ogres, int numNMES, NME *player, char level[MAX_H][MAX_W]){
+void movNMES (NME *ogres, int numNMES, NME *player, char level[MAX_H][MAX_W]){
     for (int i=0;i<numNMES;i++){
         if (ogres[i].toMove == 1){
             movNME (&ogres[i], player, level);
@@ -151,10 +149,10 @@ int setStart (NME *player, char level[MAX_H][MAX_W]){
             if (level[j][i] == 'e' || level[j][i] == '&'){
                 player->y = j;
                 player->x = i;
-                return 1;
             }
         }
     }
+    return 1;
 }
 
 int setNMES (NME *ogres, char level[MAX_H][MAX_W]){
