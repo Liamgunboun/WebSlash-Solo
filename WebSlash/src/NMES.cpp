@@ -41,10 +41,9 @@ int movChar (NME *player, int inp, char level[MAX_H][MAX_W]){
 
 int movNME (NME *ogre, NME *player, char level[MAX_H][MAX_W]){
 
-    if(abs(ogre->x-player->x) > abs(ogre->y-player->y)) {
+    if(abs(ogre->x-player->x) > abs(ogre->y-player->y)){
         if (ogre->x > player->x){
-            if (!movChar(ogre, LEFT_ARROW_KEY, level))
-                movChar(ogre, RIGHT_ARROW_KEY, level);
+            return movChar(ogre, LEFT_ARROW_KEY, level);
         }
         else if (ogre->x < player->x){
             return movChar(ogre, RIGHT_ARROW_KEY, level);

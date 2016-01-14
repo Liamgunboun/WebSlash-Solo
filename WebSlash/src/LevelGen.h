@@ -9,8 +9,10 @@
 #include <windows.h>
 
 class lvl;
+class room;
 
 int genNewLvl(lvl*);
 void writeToFile(lvl*);
+void writeCoords(room*, int);
 
 #endif

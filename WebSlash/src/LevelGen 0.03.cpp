@@ -235,6 +235,7 @@ int lvlGen (lvl *level){
 		printf("Bad level...");
 		//getch();
 	}
+	writeCoords(rooms, numRooms);
 	return 1;
 }
 
@@ -261,6 +262,14 @@ void writeToFile(lvl *level){
     fclose(lvlFile);
 }
 
+void writeCoords(room *rooms, int numRooms){
+    FILE *lvlCoords;
+    lvlCoords = fopen("../lvlFiles/lvlcoords.txt","w");
+    for (int i=0;i<numRooms;i++){
+        fprintf(lvlCoords,"%i,(%i,%i)(%i,%i)\n",i,rooms[i].x1Get(),rooms[i].y1Get(),rooms[i].x2Get(),rooms[i].y2Get());
+    }
+     fclose(lvlCoords);
+}
 //-----% Rand Function %-------
 int rb (int min, int max)
 {
