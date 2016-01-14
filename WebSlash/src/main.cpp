@@ -6,6 +6,7 @@
 #include <time.h>
 #include <Windows.h>
 #include <iostream>
+#include "NMES.h"
 #include "LevelGen.h"
 
 #define MAX_H 40
@@ -28,14 +29,6 @@ class lvl{
 		char nodeGet(int, int);
 		int nodeVisited (int, int);
 };
-
-typedef struct{
-    int x;
-    int y;
-    int hp;
-    int toMove;
-}NME;
-
 
 int readLevel( char level[MAX_H][MAX_W]){
     FILE *levelData;
@@ -74,73 +67,19 @@ int drawBoard(char level[MAX_H][MAX_W], NME player, NME *ogres, int numNMES){
     return 1;
 }
 
-
-int movChar (NME *player, int inp, char level[MAX_H][MAX_W]){
-    level[player->y][player->x] = ' ';
-    switch(inp){
-        case (UP_ARROW_KEY):
-            if (level[player->y-1][player->x] != '#')
-            player->y --;
-            break;
-        case (DOWN_ARROW_KEY):
-            if (level[player->y+1][player->x] != '#')
-            player->y ++;
-            break;
-        case (RIGHT_ARROW_KEY):
-            if (level[player->y][player->x+1] != '#')
-            player->x ++;
-            break;
-        case (LEFT_ARROW_KEY):
-            if (level[player->y][player->x-1] != '#')
-            player->x --;
-            break;
-    }
-
-    return 1;
-}
-
-
 int useInp(NME *player, int inp, char level[MAX_H][MAX_W]){
-
     if (inp == 224)
         movChar(player, getch(), level);
     return 1;
-}
+};
 
 void saveLvl(char level[MAX_H][MAX_W]){
 	FILE *lvlFile;
-	lvlFile = fopen("../lvlFiles/lvl.txt","w");
+	lvlFile = fopen("../lvlFiles/lplayer->x --;vl.txt","w");
 	for (int i = 0; i < MAX_H; i++){
             fprintf(lvlFile,"%s\n",level[i]);
 		}
     fclose(lvlFile);
-}
-
-int movNME (NME *ogre, NME *player, char level[MAX_H][MAX_W]){
-
-    if(abs(ogre->x-player->x) > abs(ogre->y-player->y)) {
-        if (ogre->x > player->x)
-            movChar(ogre, LEFT_ARROW_KEY, level);
-        else if (ogre->x < player->x)
-            movChar(ogre, RIGHT_ARROW_KEY, level);
-    }
-    else {
-        if (ogre->y > player->y)
-            movChar(ogre, UP_ARROW_KEY, level);
-        else if (ogre->y < player->y)
-            movChar(ogre, DOWN_ARROW_KEY, level);
-    }
-    return 1;
-}
-
-void movNMES (NME *ogres, int numNMES, NME *player, char level[MAX_H][MAX_W]){
-    for (int i=0;i<numNMES;i++){
-        if (ogres[i].toMove == 1){
-            movNME (&ogres[i], player, level);
-            ogres[i].toMove = 0;
-        }
-        else ogres[i].toMove = 1;
-    }
 }
 
 int setStart (NME *player, char level[MAX_H][MAX_W]){

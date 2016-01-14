@@ -34,6 +34,8 @@
 		</Compiler>
 		<Unit filename="LevelGen 0.03.cpp" />
 		<Unit filename="LevelGen.h" />
+		<Unit filename="NMES.cpp" />
+		<Unit filename="NMES.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />
