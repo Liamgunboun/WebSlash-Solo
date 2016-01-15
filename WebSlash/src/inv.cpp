@@ -12,19 +12,50 @@
 
 
 
-void dispInv (){
-    FILE* invFile;
-    invFile = fopen("../playerFiles/playerInv");
-    char invStore [MAX_HOARD][MAX_NAME_LEN];
+int initInv(){
+    char invBuff [MAX_NAME_LEN];
 
-    if (lvlFile==NULL){
-        printf("{Critical error 50}");
+    FILE* invDef;
+    invDef = fopen ("../gameFiles/invDefault.txt","r");
+    FILE* plyrInv;
+    plyrInv = fopen ("../playerFiles/playerInv.txt","w");
+
+    if (plyrInv == NULL || invDef == NULL){
+        fclose (invDef);
+        fclose (plyrInv);
+        printf("Error 49: Unable to Init inv");
+        getch();
         return 0;
     }
+    else
+        while(fgets(invBuff, MAX_NAME_LEN-1,invDef) != NULL){
+            fprintf(plyrInv,invBuff);
+        }
+    fclose (invDef);
+    fclose (plyrInv);
+    return 1;
+}
 
-    for(int i = 0; i < max)
+void dispInv (){
+    FILE* invFile;
+    invFile = fopen("../playerFiles/playerInv.txt","r");
+    char invStore [MAX_NAME_LEN];
 
+    if (invFile==NULL){
+        printf("{Critical error 50}");
+        getch();
+        fclose(invFile);
+        return;
+    }
 
+    for(int i = 0; i < MAX_HOARD; i++){
+        if (fgets(invStore, MAX_NAME_LEN-1,invFile) != NULL)
+            printf("%s \n", invStore);
+        else
+            exit;
+    }
+
+    fclose(invFile);
 }
 
 void addToInv (char*, int itemClass){

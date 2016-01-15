@@ -8,6 +8,7 @@
 #include <iostream>
 #include "NMES.h"
 #include "LevelGen.h"
+#include "inv.h"
 
 #define MAX_H 40
 #define MAX_W 60
@@ -22,13 +23,6 @@ typedef struct{
 	char ent;
 }node;
 
-class lvl{
-		node tiles[MAX_H][MAX_W];
-	public:
-		int nodeSet (int, int, char);
-		char nodeGet(int, int);
-		int nodeVisited (int, int);
-};
 
 int readLevel( char level[MAX_H][MAX_W]){
     FILE *levelData;
@@ -40,6 +34,15 @@ int readLevel( char level[MAX_H][MAX_W]){
     }
     fclose(levelData);
     return 1;
+}
+
+void saveLvl(char level[MAX_H][MAX_W]){
+	FILE *lvlFile;
+	lvlFile = fopen("../lvlFiles/lvl.txt","w");
+	for (int i = 0; i < MAX_H; i++){
+            fprintf(lvlFile,"%s\n",level[i]);
+		}
+    fclose(lvlFile);
 }
 
 void drawNMES (char level[MAX_H][MAX_W], NME *ogres, int numNMES){
@@ -73,14 +76,6 @@ int useInp(NME *player, int inp, char level[MAX_H][MAX_W]){
     return 1;
 };
 
-void saveLvl(char level[MAX_H][MAX_W]){
-	FILE *lvlFile;
-	lvlFile = fopen("../lvlFiles/lplayer->x --;vl.txt","w");
-	for (int i = 0; i < MAX_H; i++){
-            fprintf(lvlFile,"%s\n",level[i]);
-		}
-    fclose(lvlFile);
-}
 
 int setStart (NME *player, char level[MAX_H][MAX_W]){
     for (int j=0;j<MAX_H;j++){
@@ -131,7 +126,7 @@ int main(){
 	MoveWindow(console, r.left, r.top, 1280, 720, TRUE);
 	SetWindowText(console,"Web Slash v0.05");
 	//------------------------------------
-
+    initInv();
 
 
     while (inp != 'n' && inp != 'c'){
@@ -157,6 +152,7 @@ int main(){
     setStart (&player, level);
     numNMES = setNMES (dumbOgres, level);
 
+
     while(inp!=27){
 		drawBoard(level, player, dumbOgres, numNMES);
         inp=getch();
@@ -165,8 +161,8 @@ int main(){
     }
 
     system("CLS");
-    printf("\t\tWould you like to save your game? y/n")
-;    inp=getch();
+    printf("\t\tWould you like to save your game? y/n");
+    inp=getch();
     if (inp == 'y'){
         saveLvl(level);
         printf("\n\n\n\t\t\tLevel Saved!\n\n\n\n\n");
