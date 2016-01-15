@@ -24,8 +24,16 @@ typedef struct{
     int toMove;
 }NME;
 
+typedef struct{
+    int x1;
+    int y1;
+    int x2;
+    int y2;
+}roomType;
+
 int movChar(NME*, int, char[MAX_H][MAX_W]);
 int movNME(NME*, NME*, char[MAX_H][MAX_W]);
+int readRooms(roomType*);
 void movNMES(NME*, int, NME*, char[MAX_H][MAX_W]);
 
 #endif // NMES_H

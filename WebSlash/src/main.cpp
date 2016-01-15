@@ -17,19 +17,6 @@
 #define RIGHT_ARROW_KEY 77
 #define LEFT_ARROW_KEY 75
 
-typedef struct{
-	bool visited;
-	char ent;
-}node;
-
-class lvl{
-		node tiles[MAX_H][MAX_W];
-	public:
-		int nodeSet (int, int, char);
-		char nodeGet(int, int);
-		int nodeVisited (int, int);
-};
-
 int readLevel( char level[MAX_H][MAX_W]){
     FILE *levelData;
     levelData = fopen("../lvlFiles/lvl.txt","r");
