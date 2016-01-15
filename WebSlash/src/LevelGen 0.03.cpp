@@ -19,30 +19,6 @@
 #define MIN_ROOMS 5
 #define MAX_ROOMS 10
 
-typedef struct{
-	bool visited;
-	char ent;
-}node;
-
-class lvl{
-		node tiles[MAX_H][MAX_W];
-	public:
-		int nodeSet (int, int, char);
-		char nodeGet(int, int);
-		int nodeVisited (int, int);
-};
-
-class room{
-	int x1,x2,y1,y2;
-	bool visited;
-	public:
-		void setVisit(bool);
-		int x1Get();
-		int x2Get();
-		int y1Get();
-		int y2Get();
-		void setPoints(int, int, int, int);
-};
 
 int lvlGen(lvl *level);
 int rb (int min, int max);

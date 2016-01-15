@@ -39,6 +39,8 @@
 		<Unit filename="inv.cpp" />
 		<Unit filename="inv.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="plyr.cpp" />
+		<Unit filename="plyr.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

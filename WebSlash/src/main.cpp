@@ -18,12 +18,15 @@
 #define RIGHT_ARROW_KEY 77
 #define LEFT_ARROW_KEY 75
 
+<<<<<<< HEAD
 typedef struct{
 	bool visited;
 	char ent;
 }node;
 
 
+=======
+>>>>>>> 01381a8e2d337160ccde4e2ecb8eae26889c123b
 int readLevel( char level[MAX_H][MAX_W]){
     FILE *levelData;
     levelData = fopen("../lvlFiles/lvl.txt","r");
