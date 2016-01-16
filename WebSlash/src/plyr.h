@@ -3,11 +3,11 @@
 
 class player{
     int x,y;
-    int hp;
+    int hp, atk, def, atkBoost, defBoost;
     bool alive;
 
     public:
-        int setHp(int);
+        void setHp(int);
         int getHp();
         void changeHp(int);
         void movePlayer(int,int);

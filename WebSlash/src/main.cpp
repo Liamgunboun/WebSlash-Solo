@@ -9,24 +9,17 @@
 #include "NMES.h"
 #include "LevelGen.h"
 #include "inv.h"
+#include "plyr.h"
 
 #define MAX_H 40
 #define MAX_W 60
+
 #define MAX_NMES 10
 #define UP_ARROW_KEY 72
 #define DOWN_ARROW_KEY 80
 #define RIGHT_ARROW_KEY 77
 #define LEFT_ARROW_KEY 75
 
-<<<<<<< HEAD
-typedef struct{
-	bool visited;
-	char ent;
-}node;
-
-
-=======
->>>>>>> 01381a8e2d337160ccde4e2ecb8eae26889c123b
 int readLevel( char level[MAX_H][MAX_W]){
     FILE *levelData;
     levelData = fopen("../lvlFiles/lvl.txt","r");
@@ -58,17 +51,20 @@ void drawPlayer (char level[MAX_H][MAX_W], NME player){
     level[player.y][player.x] = '&';
 }
 
+void printMenu(){
+    printf("\t\t\t Menu:\n Inventory: i \tExit Game: esc\t Character Sheet: c");
+}
+
 int drawBoard(char level[MAX_H][MAX_W], NME player, NME *ogres, int numNMES){
 
     system("CLS");
-
     drawNMES (level, ogres, numNMES);
-
     drawPlayer(level, player);
     for (int j = 0; j < MAX_H; j++){
         printf("%s", level[j]);
         printf("\n");
     }
+    printMenu();
 
     return 1;
 }
@@ -76,6 +72,10 @@ int drawBoard(char level[MAX_H][MAX_W], NME player, NME *ogres, int numNMES){
 int useInp(NME *player, int inp, char level[MAX_H][MAX_W]){
     if (inp == 224)
         movChar(player, getch(), level);
+    else if (inp == 'i'){
+        dispInv();
+    }
+
     return 1;
 };
 
@@ -129,7 +129,7 @@ int main(){
 	MoveWindow(console, r.left, r.top, 1280, 720, TRUE);
 	SetWindowText(console,"Web Slash v0.05");
 	//------------------------------------
-    initInv();
+
 
 
     while (inp != 'n' && inp != 'c'){
@@ -142,6 +142,8 @@ int main(){
     if (inp == 'n'){
         genNewLvl(&levl);
         writeToFile(&levl);
+        initInv();
+        addRandToInv();
     }
     if(!readLevel(level)){
         printf("\t    No existing level found, generate one now? y/n \n\n");

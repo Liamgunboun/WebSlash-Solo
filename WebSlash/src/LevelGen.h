@@ -10,7 +10,7 @@
 
 
 #define MAX_H 40
-#define MAX_W 59
+#define MAX_W 60
 
 #define RM_MAXX 20
 #define RM_MAXY 8
@@ -46,6 +46,7 @@ class room{
 
 
 int genNewLvl(lvl*);
+int rb (int min, int max);
 void writeToFile(lvl*);
 void writeCoords(room*, int);
 

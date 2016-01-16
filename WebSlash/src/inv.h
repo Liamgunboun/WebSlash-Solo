@@ -7,7 +7,17 @@
 #include <conio.h>
 #include <time.h>
 #include <windows.h>
+#define MAX_HOARD 50
+#define MAX_NAME_LEN 60
+
+typedef struct{
+    char name[MAX_NAME_LEN];
+    bool isMagical;
+    int type;
+}item;
 
 void dispInv();
+void addRandToInv();
 int initInv();
+void addToInv (char* , int);
 #endif
