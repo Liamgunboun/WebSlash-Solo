@@ -14,6 +14,8 @@ class player{
         void setPos(int,int);
         int getX();
         int getY();
+        void setAtkBon(int);
+        void setDefBon(int);
 };
 
 

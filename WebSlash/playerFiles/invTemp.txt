@@ -1,1 +1,2 @@
-Halberd of Badassery 1
+Dagger-of-Your-Mother 1 0 0 1
+Chest Plate-of-Your-older-sibling 0 1 0 2

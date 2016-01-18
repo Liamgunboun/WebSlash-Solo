@@ -7,6 +7,8 @@
 #include <conio.h>
 #include <time.h>
 #include <windows.h>
+#include "plyr.h"
+
 #define MAX_HOARD 50
 #define MAX_NAME_LEN 60
 
@@ -16,7 +18,7 @@ typedef struct{
     int type;
 }item;
 
-void dispInv();
+void dispInv(player*);
 void addRandToInv();
 int initInv();
 void addToInv (char* , int);

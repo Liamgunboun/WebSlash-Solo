@@ -47,19 +47,19 @@ void drawNMES (char level[MAX_H][MAX_W], NME *ogres, int numNMES){
     }
 }
 
-void drawPlayer (char level[MAX_H][MAX_W], NME player){
-    level[player.y][player.x] = '&';
+void drawPlayer (char level[MAX_H][MAX_W], player playr){
+    level[playr.getY()][playr.getX()] = '&';
 }
 
 void printMenu(){
     printf("\t\t\t Menu:\n Inventory: i \tExit Game: esc\t Character Sheet: c");
 }
 
-int drawBoard(char level[MAX_H][MAX_W], NME player, NME *ogres, int numNMES){
+int drawBoard(char level[MAX_H][MAX_W], player playr, NME *ogres, int numNMES){
 
     system("CLS");
     drawNMES (level, ogres, numNMES);
-    drawPlayer(level, player);
+    drawPlayer(level, playr);
     for (int j = 0; j < MAX_H; j++){
         printf("%s", level[j]);
         printf("\n");
@@ -69,23 +69,22 @@ int drawBoard(char level[MAX_H][MAX_W], NME player, NME *ogres, int numNMES){
     return 1;
 }
 
-int useInp(NME *player, int inp, char level[MAX_H][MAX_W]){
+int useInp(player *playr, int inp, char level[MAX_H][MAX_W]){
     if (inp == 224)
-        movChar(player, getch(), level);
+        movPlayr(playr, getch(), level);
     else if (inp == 'i'){
-        dispInv();
+        dispInv(playr);
     }
 
     return 1;
 };
 
 
-int setStart (NME *player, char level[MAX_H][MAX_W]){
+int setStart (player *playr, char level[MAX_H][MAX_W]){
     for (int j=0;j<MAX_H;j++){
         for (int i=0;i<MAX_W;i++){
             if (level[j][i] == 'e' || level[j][i] == '&'){
-                player->y = j;
-                player->x = i;
+                playr->setPos(i,j);
             }
         }
     }
@@ -111,14 +110,12 @@ int setNMES (NME *ogres, char level[MAX_H][MAX_W]){
 
 int main(){
 
-    NME player;
+    player playr;
     NME dumbOgres[MAX_NMES];
     int numNMES;
     int inp = 0;
     lvl levl;
     char level[MAX_H][MAX_W];
-    player.x = 19;
-    player.y = 24;
 
    //-----% Important Initializers %-----
 	srand(time(NULL));
@@ -154,15 +151,15 @@ int main(){
         }
     }
 
-    setStart (&player, level);
+    setStart (&playr, level);
     numNMES = setNMES (dumbOgres, level);
 
 
     while(inp!=27){
-		drawBoard(level, player, dumbOgres, numNMES);
+		drawBoard(level, playr, dumbOgres, numNMES);
         inp=getch();
-        useInp(&player, inp, level);
-        movNMES(dumbOgres, numNMES, &player, level);
+        useInp(&playr, inp, level);
+        movNMES(dumbOgres, numNMES, &playr, level);
     }
 
     system("CLS");

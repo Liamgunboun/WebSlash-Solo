@@ -29,4 +29,9 @@ void player::movePlayer(int cX, int cY){
 void player::setPos(int cX, int cY){
     x = cX; y = cY;
 }
-
+void player::setAtkBon(int bonus){
+    atkBoost = bonus;
+}
+void player::setDefBon(int bonus){
+    defBoost = bonus;
+}
