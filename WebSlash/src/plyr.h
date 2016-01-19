@@ -16,6 +16,12 @@ class player{
         int getY();
         void setAtkBon(int);
         void setDefBon(int);
+        void addAtkBon(int);
+        void addDefBon(int);
+        int getAtk();
+        int getDef();
+        void setAtk(int);
+        void setDef(int);
 };
 
 

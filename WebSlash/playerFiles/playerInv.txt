@@ -1,2 +1,2 @@
-Dagger-of-Your-Mother 1 0 0 1
-Chest Plate-of-Your-older-sibling 0 1 0 2
+Staff-of-No-Return 3 0 0 1
+Legs-of-Darkness 0 2 0 2

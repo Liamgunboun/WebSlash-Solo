@@ -35,3 +35,21 @@ void player::setAtkBon(int bonus){
 void player::setDefBon(int bonus){
     defBoost = bonus;
 }
+void player::addAtkBon(int bonus){
+    atkBoost = atkBoost + bonus;
+}
+void player::addDefBon(int bonus){
+    defBoost = atkBoost + bonus;
+}
+int player::getAtk(){
+    return (atk+atkBoost);
+}
+int player::getDef(){
+    return (def+defBoost);
+}
+void player::setAtk(int a){
+    atk = a;
+}
+void player::setDef(int d){
+    def = d;
+}

@@ -101,8 +101,11 @@ int equipItem (player *playr, int itemNum){
         } else {
             if (fgets(invBuff, MAX_NAME_LEN-1,invFile) != NULL){
                 sscanf(invBuff, "%s %i %i %*i %i",invBuff_Name, &atk, &def, &itemClass);
-                playr->setAtkBon(atk);
-                playr->setDefBon(def);
+                if(itemClass == WEAPON_FLAG){
+                    playr->addAtkBon(atk);
+                } else if (itemClass == ARMOR_FLAG){
+                    playr->addDefBon(def);
+                }
                 sprintf(invBuff,"%s %i %i %i %i",invBuff_Name, atk, def, 1, itemClass);
                 fprintf(invTemp,"%s\n",invBuff);
             }
@@ -126,7 +129,7 @@ int equipItem (player *playr, int itemNum){
     fclose(invTemp);
     fclose(invFile);
 
-    printf("- Item Equipped - ");
+    printf("\n\n- Item Equipped - ");
     getch();
     return 1;
 }
@@ -141,7 +144,7 @@ int unEquipItem (player *playr, int itemNum){
 
     char invBuff [MAX_NAME_LEN];
 
-    for(int i = 0; i < MAX_HOARD; i++){
+        for(int i = 0; i < MAX_HOARD; i++){
         if (i != itemNum){
             if (fgets(invBuff, MAX_NAME_LEN-1,invFile) != NULL){
                 fprintf(invTemp,invBuff);
@@ -151,9 +154,12 @@ int unEquipItem (player *playr, int itemNum){
         } else {
             if (fgets(invBuff, MAX_NAME_LEN-1,invFile) != NULL){
                 sscanf(invBuff, "%s %i %i %*i %i",invBuff_Name, &atk, &def, &itemClass);
-                playr->setAtkBon(0);
-                playr->setDefBon(0);
-                sprintf(invBuff,"%s %i %i %i %i",invBuff_Name, atk, def, 0, itemClass);
+                if(itemClass == WEAPON_FLAG){
+                    playr->addAtkBon(-atk);
+                } else if (itemClass == ARMOR_FLAG){
+                    playr->addDefBon(-def);
+                }
+                sprintf(invBuff,"%s %i %i %i %i",invBuff_Name, atk, def, 1, itemClass);
                 fprintf(invTemp,"%s\n",invBuff);
             }
             else
@@ -176,7 +182,7 @@ int unEquipItem (player *playr, int itemNum){
     fclose(invTemp);
     fclose(invFile);
 
-    printf("- Item UnEquipped - ");
+    printf("\n\n- Item UnEquipped - ");
     getch();
     return 1;
 }
@@ -240,7 +246,7 @@ void addToInv (char *item, int itemNum){
 }
 
 const char* weaponNameGen(char *itemName, int itemClass){
-    const char* prefix[] = {"Sword", "Halberd", "Blade", "Dagger", "Brick", "Shovel", "Sharp Stick", "Staff" };
+    const char* prefix[] = {"Sword", "Halberd", "Blade", "Dagger", "Brick", "Shovel", "Sharp-Stick", "Staff" };
     const char* suffix[] = {"Sharpness", "Gouging", "No-Return", "Badassery", "De-Boning", "Fortitude", "Your-Mother"};
 
 
@@ -257,7 +263,7 @@ const char* weaponNameGen(char *itemName, int itemClass){
 }
 
 const char* armorNameGen(char *itemName, int itemClass){
-    const char* prefix[] = {"Robe", "Mail", "Cap", "SnapBack", "Helm", "Chest Plate", "Cuirass", "Jeans", "Chaps", "Legs", "Socks", "Boots"};
+    const char* prefix[] = {"Robe", "Mail", "Cap", "SnapBack", "Helm", "Chest-Plate", "Cuirass", "Jeans", "Chaps", "Legs", "Socks", "Boots"};
     const char* suffix[] = {"Swiftness", "Protection", "Horrid-Fashion", "Darkness", "Awesomeness", "Fortitude", "Your-older-sibling"};
 
     if (itemClass == 1){

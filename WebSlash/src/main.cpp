@@ -14,6 +14,9 @@
 #define MAX_H 40
 #define MAX_W 60
 
+#define BASE_ATK 5
+#define BASE_DEF 5
+
 #define MAX_NMES 10
 #define UP_ARROW_KEY 72
 #define DOWN_ARROW_KEY 80
@@ -56,12 +59,17 @@ void printMenu(){
 }
 
 int drawBoard(char level[MAX_H][MAX_W], player playr, NME *ogres, int numNMES){
-
     system("CLS");
     drawNMES (level, ogres, numNMES);
     drawPlayer(level, playr);
+
     for (int j = 0; j < MAX_H; j++){
         printf("%s", level[j]);
+        if(j==0){
+            printf("\tHp: %i", playr.getHp());
+        } else if (j == 2){
+            printf(" Atk: %i   Def: %i", playr.getAtk(), playr.getDef());
+        }
         printf("\n");
     }
     printMenu();
@@ -141,7 +149,13 @@ int main(){
         writeToFile(&levl);
         initInv();
         addRandToInv();
+        playr.setAtkBon(0);
+        playr.setDefBon(0);
+        playr.setAtk(BASE_ATK);
+        playr.setDef(BASE_DEF);
+        playr.setHp(30);
     }
+
     if(!readLevel(level)){
         printf("\t    No existing level found, generate one now? y/n \n\n");
         inp = getch();

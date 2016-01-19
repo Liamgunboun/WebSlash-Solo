@@ -1,2 +1,2 @@
-Dagger-of-Your-Mother 1 0 0 1
-Chest Plate-of-Your-older-sibling 0 1 0 2
+Blade-of-Sharpness 3 0 1 1
+Boots-of-Fortitude 0 2 1 2
