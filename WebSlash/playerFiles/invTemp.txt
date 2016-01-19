@@ -1,2 +1,2 @@
-Blade-of-Sharpness 3 0 1 1
-Boots-of-Fortitude 0 2 1 2
+Staff-of-Badassery 2 0 1 1
+SnapBack-of-Horrid-Fashion 0 1 1 2

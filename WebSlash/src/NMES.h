@@ -10,6 +10,7 @@
 #include <iostream>
 #include "plyr.h"
 
+#define MAX_ROOMS 10
 #define MAX_H 40
 #define MAX_W 60
 #define MAX_NMES 10
@@ -35,7 +36,7 @@ typedef struct{
 int movChar(NME*, int, char[MAX_H][MAX_W]);
 int movNME(NME*, NME*, char[MAX_H][MAX_W]);
 int readRooms(roomType*);
-void movNMES(NME*, int, player*, char[MAX_H][MAX_W]);
+void movNMES(NME*, int, player*, char[MAX_H][MAX_W], roomType rooms[MAX_ROOMS], int);
 int movPlayr (player*, int, char level[MAX_H][MAX_W]);
 
 #endif // NMES_H

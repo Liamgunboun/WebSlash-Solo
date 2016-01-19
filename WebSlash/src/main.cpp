@@ -124,6 +124,8 @@ int main(){
     int inp = 0;
     lvl levl;
     char level[MAX_H][MAX_W];
+    roomType rooms[MAX_ROOMS];
+    int numRooms;
 
    //-----% Important Initializers %-----
 	srand(time(NULL));
@@ -168,12 +170,13 @@ int main(){
     setStart (&playr, level);
     numNMES = setNMES (dumbOgres, level);
 
+    numRooms = readRooms (rooms);
 
     while(inp!=27){
 		drawBoard(level, playr, dumbOgres, numNMES);
         inp=getch();
         useInp(&playr, inp, level);
-        movNMES(dumbOgres, numNMES, &playr, level);
+        movNMES(dumbOgres, numNMES, &playr, level, rooms, numRooms);
     }
 
     system("CLS");
