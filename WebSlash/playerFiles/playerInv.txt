@@ -1,2 +1,2 @@
-Brick-of-Sharpness 2 0 0 1
-Robe-of-Awesomeness 0 3 0 2
+Sharp-Stick-of-Sword 2 0 0 1
+Jeans-of-Awesomeness 0 1 0 2

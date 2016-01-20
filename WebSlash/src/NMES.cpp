@@ -8,6 +8,12 @@
 #include "NMES.h"
 
 #define MAX_ROOMS 10
+#define RAND_WANDER 3 //ogres will wander every 1 in RAND_WANDER movement turns (a movement turn is every other turn)
+
+int randBetween (int min, int max)
+{
+	return rand() % (max - min + 1) + min;
+}
 
 int readRooms(roomType *rooms){
     FILE *roomCoords;
@@ -17,6 +23,13 @@ int readRooms(roomType *rooms){
         fscanf(roomCoords,"%i,(%i,%i)(%i,%i)\n",&i,&rooms[i].x1,&rooms[i].y1,&rooms[i].x2,&rooms[i].y2);
     }
     return i; //returns # of rooms in file
+}
+
+int inWhichRoomXY(roomType *rooms, int numRooms, int x, int y){
+    for (int i=0;i<numRooms;i++)
+        if (x >= rooms[i].x1 && y >= rooms[i].y1 && x <= rooms[i].x2 && y <= rooms[i].y2)
+            return i;
+    return -1;
 }
 
 int inWhichRoomO(roomType *rooms, int numRooms, NME *ogre){
@@ -102,21 +115,45 @@ int movChar (NME *player, int inp, char level[MAX_H][MAX_W]){
     return 0;
 }
 
-int movNME (NME *ogre, player *playr, char level[MAX_H][MAX_W]){
+int wanderNME (NME *ogre, char level[MAX_H][MAX_W], roomType *rooms, int numRooms){
+    if (randBetween(1,RAND_WANDER) == 1){
+        switch (randBetween(1,4)){ //1 is up, 2 is down, 3 is left, 4 is right
+            case 1 : //up
+                if (inWhichRoomXY(rooms, numRooms, ogre->x, ogre->y-1) != -1)
+                    return movChar (ogre, UP_ARROW_KEY, level);
+                break;
+            case 2 : //down
+                if (inWhichRoomXY(rooms, numRooms, ogre->x, ogre->y+1) != -1)
+                    return movChar (ogre, DOWN_ARROW_KEY, level);
+                break;
+            case 3 : //left
+                if (inWhichRoomXY(rooms, numRooms, ogre->x-1, ogre->y) != -1)
+                    return movChar (ogre, LEFT_ARROW_KEY, level);
+                break;
+            case 4 : //right
+                if (inWhichRoomXY(rooms, numRooms, ogre->x+1, ogre->y) != -1)
+                    return movChar (ogre, RIGHT_ARROW_KEY, level);
+                break;
+        }
+    }
+    return 0;
+}
+
+int movNME (NME *ogre, player *playr, char level[MAX_H][MAX_W], roomType *rooms, int numRooms){
 
     if(abs(ogre->x-playr->getX()) > abs(ogre->y-playr->getY())){
-        if (ogre->x - playr->getX() > 1){
+        if (ogre->x - playr->getX() > 1 && (inWhichRoomXY(rooms, numRooms, ogre->x-1, ogre->y) != -1)){
             return movChar(ogre, LEFT_ARROW_KEY, level);
         }
-        else if (ogre->x - playr->getX() < -1){
+        else if (ogre->x - playr->getX() < -1 && (inWhichRoomXY(rooms, numRooms, ogre->x+1, ogre->y) != -1)){
             return movChar(ogre, RIGHT_ARROW_KEY, level);
         }
     }
     else {
-        if (ogre->y - playr->getY() > 1){
+        if (ogre->y - playr->getY() > 1 && (inWhichRoomXY(rooms, numRooms, ogre->x, ogre->y-1) != -1)){
             return movChar(ogre, UP_ARROW_KEY, level);
         }
-        else if (ogre->y - playr->getY() < -1){
+        else if (ogre->y - playr->getY() < -1 && (inWhichRoomXY(rooms, numRooms, ogre->x, ogre->y+1) != -1)){
             return movChar(ogre, DOWN_ARROW_KEY, level);
         }
     }
@@ -124,9 +161,12 @@ int movNME (NME *ogre, player *playr, char level[MAX_H][MAX_W]){
 
 void movNMES (NME *ogres, int numNMES, player *playr, char level[MAX_H][MAX_W], roomType rooms[MAX_ROOMS], int numRooms){
     for (int i=0;i<numNMES;i++){
-        if (ogres[i].toMove == 1 && inSameRoom(rooms, numRooms, &ogres[i], playr)){
-            movNME (&ogres[i], playr, level);
-            ogres[i].toMove = 0;
+        if (ogres[i].toMove == 1){
+            if (inSameRoom(rooms, numRooms, &ogres[i], playr)){
+                movNME (&ogres[i], playr, level, rooms, numRooms);
+                ogres[i].toMove = 0;
+            }
+            else wanderNME (&ogres[i], level, rooms, numRooms);
         }
         else ogres[i].toMove = 1;
     }
