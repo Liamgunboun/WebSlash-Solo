@@ -87,7 +87,7 @@ int equipItem (player *playr, int itemNum){
     FILE* invFile;
     invFile = fopen ("../playerFiles/playerInv.txt","r");
     char invBuff_Name [MAX_NAME_LEN];
-    int atk, def, itemClass;
+    int atk, def, itemClass, eqFlag;
 
     char invBuff [MAX_NAME_LEN];
 
@@ -100,10 +100,10 @@ int equipItem (player *playr, int itemNum){
                 exit;
         } else {
             if (fgets(invBuff, MAX_NAME_LEN-1,invFile) != NULL){
-                sscanf(invBuff, "%s %i %i %*i %i",invBuff_Name, &atk, &def, &itemClass);
-                if(itemClass == WEAPON_FLAG){
+                sscanf(invBuff, "%s %i %i %i %i",invBuff_Name, &atk, &def, &eqFlag,&itemClass);
+                if(itemClass == WEAPON_FLAG && !eqFlag){
                     playr->addAtkBon(atk);
-                } else if (itemClass == ARMOR_FLAG){
+                } else if (itemClass == ARMOR_FLAG && !eqFlag){
                     playr->addDefBon(def);
                 }
                 sprintf(invBuff,"%s %i %i %i %i",invBuff_Name, atk, def, 1, itemClass);
@@ -140,7 +140,7 @@ int unEquipItem (player *playr, int itemNum){
     FILE* invFile;
     invFile = fopen ("../playerFiles/playerInv.txt","r");
     char invBuff_Name [MAX_NAME_LEN];
-    int atk, def, itemClass;
+    int atk, def, itemClass, eqFlag;
 
     char invBuff [MAX_NAME_LEN];
 
@@ -153,13 +153,13 @@ int unEquipItem (player *playr, int itemNum){
                 exit;
         } else {
             if (fgets(invBuff, MAX_NAME_LEN-1,invFile) != NULL){
-                sscanf(invBuff, "%s %i %i %*i %i",invBuff_Name, &atk, &def, &itemClass);
-                if(itemClass == WEAPON_FLAG){
+                sscanf(invBuff, "%s %i %i %i %i",invBuff_Name, &atk, &def, &eqFlag, &itemClass);
+                if(itemClass == WEAPON_FLAG && eqFlag){
                     playr->addAtkBon(-atk);
-                } else if (itemClass == ARMOR_FLAG){
+                } else if (itemClass == ARMOR_FLAG && eqFlag){
                     playr->addDefBon(-def);
                 }
-                sprintf(invBuff,"%s %i %i %i %i",invBuff_Name, atk, def, 1, itemClass);
+                sprintf(invBuff,"%s %i %i %i %i",invBuff_Name, atk, def, 0, itemClass);
                 fprintf(invTemp,"%s\n",invBuff);
             }
             else
@@ -245,52 +245,64 @@ void addToInv (char *item, int itemNum){
     fclose(invFile);
 }
 
-const char* weaponNameGen(char *itemName, int itemClass){
+const char* weaponNameGen(char *itemName, int itemClass, int max_atk){
     const char* prefix[] = {"Sword", "Halberd", "Blade", "Dagger", "Brick", "Shovel", "Sharp-Stick", "Staff" };
     const char* suffix[] = {"Sharpness", "Gouging", "No-Return", "Badassery", "De-Boning", "Fortitude", "Your-Mother"};
 
 
     if (itemClass == 1){
-        sprintf(itemName,"%s-of-%s %i %i", prefix[rb(0,3)], suffix[rb(0,7)], rb(1,3), 0);
+        sprintf(itemName,"%s-of-%s %i %i", prefix[rb(0,3)], suffix[rb(0,7)], rb(1,max_atk), 0);
         return itemName;
     } else if (itemClass == 2) {
-        sprintf(itemName,"%s-of-%s %i %i", prefix[rb(4,6)], suffix[rb(0,7)], rb(1,3), 0);
+        sprintf(itemName,"%s-of-%s %i %i", prefix[rb(4,6)], suffix[rb(0,7)], rb(1,max_atk), 0);
         return itemName;
     } else if (itemClass == 3) {
-        sprintf(itemName,"%s-of-%s %i %i", prefix[7], suffix[rb(0,7)], rb(1,3), 0);
+        sprintf(itemName,"%s-of-%s %i %i", prefix[7], suffix[rb(0,7)], rb(1,max_atk), 0);
         return itemName;
     }
 }
 
-const char* armorNameGen(char *itemName, int itemClass){
+const char* armorNameGen(char *itemName, int itemClass, int max_def){
     const char* prefix[] = {"Robe", "Mail", "Cap", "SnapBack", "Helm", "Chest-Plate", "Cuirass", "Jeans", "Chaps", "Legs", "Socks", "Boots"};
     const char* suffix[] = {"Swiftness", "Protection", "Horrid-Fashion", "Darkness", "Awesomeness", "Fortitude", "Your-older-sibling"};
 
     if (itemClass == 1){
-        sprintf(itemName,"%s-of-%s %i %i", prefix[rb(0,1)], suffix[rb(0,6)], 0, rb(1,3));
+        sprintf(itemName,"%s-of-%s %i %i", prefix[rb(0,1)], suffix[rb(0,6)], 0, rb(1,max_def));
         return itemName;
     } else if (itemClass == 2) {
-        sprintf(itemName,"%s-of-%s %i %i", prefix[rb(2,4)], suffix[rb(0,6)], 0, rb(1,3));
+        sprintf(itemName,"%s-of-%s %i %i", prefix[rb(2,4)], suffix[rb(0,6)], 0, rb(1,max_def));
         return itemName;
     } else if (itemClass == 3) {
-        sprintf(itemName,"%s-of-%s %i %i", prefix[rb(5,6)], suffix[rb(0,6)], 0, rb(1,3));
+        sprintf(itemName,"%s-of-%s %i %i", prefix[rb(5,6)], suffix[rb(0,6)], 0, rb(1,max_def));
         return itemName;
     } else if (itemClass == 4) {
-        sprintf(itemName,"%s-of-%s %i %i", prefix[rb(7,9)], suffix[rb(0,6)], 0, rb(1,3));
+        sprintf(itemName,"%s-of-%s %i %i", prefix[rb(7,9)], suffix[rb(0,6)], 0, rb(1,max_def));
         return itemName;
     } else if (itemClass == 5) {
-        sprintf(itemName,"%s-of-%s %i %i", prefix[rb(10,11)], suffix[rb(0,6)], 0, rb(1,3));
+        sprintf(itemName,"%s-of-%s %i %i", prefix[rb(10,11)], suffix[rb(0,6)], 0, rb(1,max_def));
         return itemName;
     }
 }
 
 
-void addRandToInv(){
+void makeStartInv(){
     FILE* invFile;
     invFile = fopen("../playerFiles/playerInv.txt","w");
     char itemName[MAX_NAME_LEN];
-    fprintf(invFile,"%s %i %i\n", weaponNameGen(itemName, rb(1,3)),0,WEAPON_FLAG);
-    fprintf(invFile,"%s %i %i\n", armorNameGen(itemName, rb(1,5)),0,ARMOR_FLAG);
+    fprintf(invFile,"%s %i %i\n", weaponNameGen(itemName, rb(1,3), 3),0,WEAPON_FLAG);
+    fprintf(invFile,"%s %i %i\n", armorNameGen(itemName, rb(1,5), 3),0,ARMOR_FLAG);
+
+    fclose(invFile);
+}
+
+void addRandToInv(int type){
+    FILE* invFile;
+    invFile = fopen("../playerFiles/playerInv.txt","w");
+    char itemName[MAX_NAME_LEN];
+    if (type == 1)
+    fprintf(invFile,"%s %i %i\n", weaponNameGen(itemName, rb(1,3), 20),0,WEAPON_FLAG);
+    else
+    fprintf(invFile,"%s %i %i\n", armorNameGen(itemName, rb(1,5), 20),0,ARMOR_FLAG);
 
     fclose(invFile);
 }

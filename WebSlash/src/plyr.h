@@ -22,6 +22,8 @@ class player{
         int getDef();
         void setAtk(int);
         void setDef(int);
+        void savePlayer ();
+        void readPlayer ();
 };
 
 

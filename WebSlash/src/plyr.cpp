@@ -53,3 +53,15 @@ void player::setAtk(int a){
 void player::setDef(int d){
     def = d;
 }
+void player::savePlayer (){
+    FILE* playerFile;
+    playerFile = fopen("../playerFiles/playerSave.txt","w");
+    fprintf(playerFile,"%i %i %i %i %i %i %i",x, y, hp, atk, def, atkBoost, defBoost);
+    fclose(playerFile);
+}
+void player::readPlayer (){
+    FILE* playerFile;
+    playerFile = fopen("../playerFiles/playerSave.txt","r");
+    fscanf(playerFile,"%i %i %i %i %i %i %i",&x, &y, &hp, &atk, &def, &atkBoost, &defBoost);
+    fclose(playerFile);
+}
