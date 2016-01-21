@@ -1,2 +1,2 @@
-Sharp-Stick-of-Sword 2 0 0 1
-Jeans-of-Awesomeness 0 1 0 2
+Dagger-of-No-Return 3 0 0 1
+Cuirass-of-Fortitude 0 1 0 2
