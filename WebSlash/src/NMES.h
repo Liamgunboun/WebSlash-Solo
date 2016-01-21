@@ -36,7 +36,9 @@ typedef struct{
 int movChar(NME*, int, char[MAX_H][MAX_W]);
 int movNME(NME*, NME*, char[MAX_H][MAX_W]);
 int readRooms(roomType*);
+int nextToOgreXY (int, int, NME*, int);
 void movNMES(NME*, int, player*, char[MAX_H][MAX_W], roomType rooms[MAX_ROOMS], int);
 int movPlayr (player*, int, char level[MAX_H][MAX_W]);
+void drawCombatMenu (NME*, int, player*);
 
 #endif // NMES_H

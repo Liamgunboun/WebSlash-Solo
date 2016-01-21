@@ -171,3 +171,20 @@ void movNMES (NME *ogres, int numNMES, player *playr, char level[MAX_H][MAX_W], 
         else ogres[i].toMove = 1;
     }
 }
+
+int nextToAnyOgreXY (int playerX, int playerY, NME *ogres, int numNMES){
+    for (int i=0;i<numNMES;i++){
+        if ((abs(playerX - ogres[i].x) <= 1 && playerY - ogres[i].y == 0) ||
+            (playerX - ogres[i].x == 0 && abs(playerY - ogres[i].y) <= 1)){
+            return 1;
+        }
+    }
+    return 0;
+}
+
+void drawCombatMenu (NME *ogres, int numNMES, player *playr){
+    printf ("%\n");
+    if (nextToAnyOgreXY(playr->getX(), playr->getY(), ogres, numNMES)){
+        printf("move towards ogre to attack");
+    }
+}

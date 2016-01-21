@@ -106,6 +106,7 @@ int setNMES (NME *ogres, char level[MAX_H][MAX_W]){
             if (level[j][i] == 'o'){
                 ogres[numOgres].y = j;
                 ogres[numOgres].x = i;
+                ogres[numOgres].hp = 10;
                 ogres[numOgres].toMove = 1;
                 numOgres++;
             }
@@ -174,6 +175,7 @@ int main(){
 
     while(inp!=27){
 		drawBoard(level, playr, dumbOgres, numNMES);
+		drawCombatMenu(dumbOgres, numNMES, &playr);
         inp=getch();
         useInp(&playr, inp, level);
         movNMES(dumbOgres, numNMES, &playr, level, rooms, numRooms);
