@@ -1,2 +1,2 @@
-Shovel-of-Fortitude 1 0 0 1
-Cuirass-of-Awesomeness 0 2 0 2
+Dagger-of-Fortitude 1 0 0 1
+Robe-of-Fortitude 0 1 0 2
