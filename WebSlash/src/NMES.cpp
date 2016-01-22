@@ -6,6 +6,8 @@
 #include <Windows.h>
 #include <iostream>
 #include "NMES.h"
+#include "inv.h"
+#include "levelGen.h"
 
 #define MAX_ROOMS 10
 #define RAND_WANDER 4 //ogres will wander every 1 in RAND_WANDER movement turns (a movement turn is every other turn)
@@ -49,48 +51,55 @@ int movPlayr (player *playr, int inp, char level[MAX_H][MAX_W], NME *ogres, int 
     level[playr->getY()][playr->getX()] = ' ';
     switch(inp){
         case (UP_ARROW_KEY):
-            if (level[playr->getY()-1][playr->getX()] != '#'){
-                if (level[playr->getY()-1][playr->getX()] != 'o'){
-                    playr->movePlayer(0,-1);
-                    return 1;
-                }
-                else if (level[playr->getY()-1][playr->getX()] == 'o'){
-                    playerAttackNME(playr, &ogres[whichOgreXY(ogres, numNMES, playr->getX(), playr->getY()-1)]);
-                }
+            if (level[playr->getY()-1][playr->getX()] != '#' && level[playr->getY()-1][playr->getX()] != 'o'){
+                if (level[playr->getY()-1][playr->getX()] == '*') addRandToInv(rb(1,2));
+                else if (level[playr->getY()-1][playr->getX()] == '$') playr->addPoints(rb(1,1000));
+
+                playr->movePlayer(0,-1);
+                return 1;
+            }
+            else if (level[playr->getY()-1][playr->getX()] == 'o'){
+                playerAttackNME(playr, &ogres[whichOgreXY(ogres, numNMES, playr->getX(), playr->getY()-1)]);
             }
             break;
         case (DOWN_ARROW_KEY):
-            if (level[playr->getY()+1][playr->getX()] != '#'){
-                if (level[playr->getY()+1][playr->getX()] != 'o'){
-                    playr->movePlayer(0,1);
-                    return 1;
-                }
-                else if (level[playr->getY()+1][playr->getX()] == 'o'){
-                    playerAttackNME(playr, &ogres[whichOgreXY(ogres, numNMES, playr->getX(), playr->getY()+1)]);
-                }
+            if (level[playr->getY()+1][playr->getX()] != '#' && level[playr->getY()+1][playr->getX()] != 'o'){
+                if (level[playr->getY()+1][playr->getX()] == '*') addRandToInv(rb(1,2));
+                else if (level[playr->getY()+1][playr->getX()] == '$') playr->addPoints(rb(1,1000));
+
+                playr->movePlayer(0,1);
+                return 1;
             }
+            else if (level[playr->getY()+1][playr->getX()] == 'o'){
+                playerAttackNME(playr, &ogres[whichOgreXY(ogres, numNMES, playr->getX(), playr->getY()+1)]);
+            }
+
             break;
         case (RIGHT_ARROW_KEY):
-            if (level[playr->getY()][playr->getX()+1] != '#'){
-                if (level[playr->getY()][playr->getX()+1] != 'o'){
-                    playr->movePlayer(1,0);
-                    return 1;
-                }
-                else if (level[playr->getY()][playr->getX()+1] == 'o'){
-                    playerAttackNME(playr, &ogres[whichOgreXY(ogres, numNMES, playr->getX()+1, playr->getY())]);
-                }
+            if (level[playr->getY()][playr->getX()+1] != '#' && level[playr->getY()][playr->getX()+1] != 'o'){
+                if (level[playr->getY()][playr->getX()+1] == '*')addRandToInv(rb(1,2));
+                else if (level[playr->getY()][playr->getX()+1] == '$') playr->addPoints(rb(1,1000));
+
+                playr->movePlayer(1,0);
+                return 1;
             }
+            else if (level[playr->getY()][playr->getX()+1] == 'o'){
+                playerAttackNME(playr, &ogres[whichOgreXY(ogres, numNMES, playr->getX()+1, playr->getY())]);
+            }
+
             break;
         case (LEFT_ARROW_KEY):
-            if (level[playr->getY()][playr->getX()-1] != '#'){
-                if (level[playr->getY()][playr->getX()-1] != 'o'){
-                    playr->movePlayer(-1,0);
-                    return 1;
-                }
-                else if (level[playr->getY()][playr->getX()-1] == 'o'){
-                    playerAttackNME(playr, &ogres[whichOgreXY(ogres, numNMES, playr->getX()-1, playr->getY())]);
-                }
+            if (level[playr->getY()][playr->getX()-1] != '#' && level[playr->getY()][playr->getX()-1] != 'o'){
+                if (level[playr->getY()][playr->getX()-1] == '*') addRandToInv(rb(1,2));
+                else if (level[playr->getY()][playr->getX()-1] == '$')playr->addPoints(rb(1,1000));
+
+                playr->movePlayer(-1,0);
+                return 1;
             }
+            else if (level[playr->getY()][playr->getX()-1] == 'o'){
+                playerAttackNME(playr, &ogres[whichOgreXY(ogres, numNMES, playr->getX()-1, playr->getY())]);
+            }
+
             break;
     }
     return 0;

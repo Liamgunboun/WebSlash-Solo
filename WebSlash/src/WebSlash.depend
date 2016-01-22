@@ -80,7 +80,7 @@
 	<time.h>
 	<windows.h>
 
-1453437558 source:c:\users\admin\documents\github\webslash-solo\webslash\src\main.cpp
+1453439412 source:c:\users\admin\documents\github\webslash-solo\webslash\src\main.cpp
 	<string.h>
 	<stdio.h>
 	<stdlib.h>
@@ -252,7 +252,7 @@
 	<windows.h>
 	"plyr.h"
 
-1453436530 source:c:\users\admin\documents\github\webslash-solo\webslash\src\nmes.cpp
+1453438966 source:c:\users\admin\documents\github\webslash-solo\webslash\src\nmes.cpp
 	<string.h>
 	<stdio.h>
 	<stdlib.h>
@@ -261,8 +261,10 @@
 	<Windows.h>
 	<iostream>
 	"NMES.h"
+	"inv.h"
+	"levelGen.h"
 
-1453431578 source:c:\users\admin\documents\github\webslash-solo\webslash\src\plyr.cpp
+1453438754 source:c:\users\admin\documents\github\webslash-solo\webslash\src\plyr.cpp
 	<string.h>
 	<stdio.h>
 	<stdlib.h>
@@ -272,7 +274,7 @@
 	<iostream>
 	"plyr.h"
 
-1453418034 source:c:\users\admin\documents\github\webslash-solo\webslash\src\inv.cpp
+1453439175 source:c:\users\admin\documents\github\webslash-solo\webslash\src\inv.cpp
 	<string.h>
 	<stdio.h>
 	<stdlib.h>
@@ -284,7 +286,7 @@
 	"LevelGen.h"
 	"plyr.h"
 
-1453431515 c:\users\admin\documents\github\webslash-solo\webslash\src\plyr.h
+1453438878 c:\users\admin\documents\github\webslash-solo\webslash\src\plyr.h
 
 1453225549 source:\\ad.ocdsb.ca\studenthome\4\s071027834\grade 12 proramming\new folder\webslash-solo\webslash\src\inv.cpp
 	<string.h>

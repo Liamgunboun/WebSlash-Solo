@@ -81,6 +81,25 @@ int destroyItem(int itemNum){
     return 1;
 }
 
+int alreadyEquipped(int itemClass){
+    FILE* invFile;
+    invFile = fopen ("../playerFiles/playerInv.txt","r");
+    char invBuff [MAX_NAME_LEN];
+    int eqFlag, itemClas;
+
+    for(int i = 0; i < MAX_HOARD; i++){
+        if (fgets(invBuff, MAX_NAME_LEN-1,invFile) != NULL){
+            sscanf(invBuff, "%*s %*i %*i %i %i",&eqFlag,&itemClas);
+            if (eqFlag && itemClass == itemClas){
+                printf("\nSorry you already have one of that type equipped.");
+                getch();
+                return 1;
+            }
+        }
+    }
+    return 0;
+}
+
 int equipItem (player *playr, int itemNum){
     FILE* invTemp;
     invTemp = fopen ("../playerFiles/invTemp.txt","w");
@@ -101,9 +120,9 @@ int equipItem (player *playr, int itemNum){
         } else {
             if (fgets(invBuff, MAX_NAME_LEN-1,invFile) != NULL){
                 sscanf(invBuff, "%s %i %i %i %i",invBuff_Name, &atk, &def, &eqFlag,&itemClass);
-                if(itemClass == WEAPON_FLAG && !eqFlag){
+                if(itemClass == WEAPON_FLAG && !eqFlag && alreadyEquipped(WEAPON_FLAG)){
                     playr->addAtkBon(atk);
-                } else if (itemClass == ARMOR_FLAG && !eqFlag){
+                } else if (itemClass == ARMOR_FLAG && !eqFlag && alreadyEquipped(ARMOR_FLAG)){
                     playr->addDefBon(def);
                 }
                 sprintf(invBuff,"%s %i %i %i %i",invBuff_Name, atk, def, 1, itemClass);
@@ -289,20 +308,20 @@ void makeStartInv(){
     FILE* invFile;
     invFile = fopen("../playerFiles/playerInv.txt","w");
     char itemName[MAX_NAME_LEN];
-    fprintf(invFile,"%s %i %i\n", weaponNameGen(itemName, rb(1,3), 3),0,WEAPON_FLAG);
-    fprintf(invFile,"%s %i %i\n", armorNameGen(itemName, rb(1,5), 3),0,ARMOR_FLAG);
+    fprintf(invFile,"%s %i %i\n", weaponNameGen(itemName, rb(1,3), 2),0,WEAPON_FLAG);
+    fprintf(invFile,"%s %i %i\n", armorNameGen(itemName, rb(1,5), 2),0,ARMOR_FLAG);
 
     fclose(invFile);
 }
 
 void addRandToInv(int type){
     FILE* invFile;
-    invFile = fopen("../playerFiles/playerInv.txt","w");
+    invFile = fopen("../playerFiles/playerInv.txt","a");
     char itemName[MAX_NAME_LEN];
     if (type == 1)
-    fprintf(invFile,"%s %i %i\n", weaponNameGen(itemName, rb(1,3), 20),0,WEAPON_FLAG);
+    fprintf(invFile,"%s %i %i\n", weaponNameGen(itemName, rb(1,3), 5),0,WEAPON_FLAG);
     else
-    fprintf(invFile,"%s %i %i\n", armorNameGen(itemName, rb(1,5), 20),0,ARMOR_FLAG);
+    fprintf(invFile,"%s %i %i\n", armorNameGen(itemName, rb(1,5), 5),0,ARMOR_FLAG);
 
     fclose(invFile);
 }

@@ -15,6 +15,9 @@
 #define MAX_H 40
 #define MAX_W 60
 
+#define MAX_MON 10
+#define MAX_STAR 10
+
 #define BASE_ATK 5
 #define BASE_DEF 5
 
@@ -75,7 +78,8 @@ int drawBoard(char level[MAX_H][MAX_W], player playr, NME *ogres, int numNMES, i
             printf("\tHp: %i", playr.getHp());
         } else if (j == 2){
             printf(" Atk: %i   Def: %i", playr.getAtk(), playr.getDef());
-        }
+        } else if (j == 4)
+            printf(" POINTS: %i", playr.getPoints());
         printf("\n");
     }
     printMenu();
@@ -215,6 +219,7 @@ int main(){
             drawCombatMenu(dumbOgres, &numNMES, &playr, level);
             exitTile.collision = isCollision(&exitTile, &playr);
             inp=getch();
+            if (playr.getHp()<30)playr.changeHp(1);
             useInp(&playr, inp, level, dumbOgres, numNMES);
             movNMES(dumbOgres, numNMES, &playr, level, rooms, numRooms);
 

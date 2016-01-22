@@ -2,8 +2,7 @@
 #define PLYR_H_INCLUDED
 
 class player{
-    int x,y;
-    int hp, atk, def, atkBoost, defBoost;
+    int x,y,hp, atk, def, atkBoost, defBoost, points;
     bool alive;
 
     public:
@@ -27,6 +26,8 @@ class player{
         int isAlive();
         void setAlive();
         void setDead();
+        void addPoints(int);
+        int getPoints();
 };
 
 

@@ -77,3 +77,9 @@ void player::setAlive(){
 void player::setDead(){
     alive = false;
 }
+void player::addPoints(int pts){
+    points = points = pts;
+}
+int player::getPoints(){
+    return points;
+}
