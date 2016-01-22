@@ -19,7 +19,7 @@ typedef struct{
 }item;
 
 void dispInv(player*);
-void addRandToInv();
+void addRandToInv(int);
 void makeStartInv();
 int initInv();
 void addToInv (char* , int);
