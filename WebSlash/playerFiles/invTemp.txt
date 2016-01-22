@@ -1,1 +1,2 @@
-Blade-of-Badassery 2 0 0 1
+Shovel-of-Badassery 1 0 1 1
+Robe-of-Fortitude 0 2 1 2

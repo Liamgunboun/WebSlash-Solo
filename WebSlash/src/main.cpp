@@ -58,12 +58,18 @@ void drawExit (char level[MAX_H][MAX_W], itemType item){
     level[item.y][item.x] = 'E';
 }
 
+void drawItems (char level[MAX_H][MAX_W], itemType *items, char c, int numItems){
+    for (int i=0;i<numItems;i++){
+        level[items[i].y][items[i].x] = c;
+    }
+}
+
 void drawPlayer (char level[MAX_H][MAX_W], player playr){
     level[playr.getY()][playr.getX()] = '&';
 }
 
 void printMenu(){
-    printf("\t\t\t Menu:\n Inventory: i \tExit Game: esc\t Character Sheet: c");
+    printf("\t\t\t Menu:\n Inventory: i \tExit   Game: esc\t Character Sheet: c");
 }
 
 int drawBoard(char level[MAX_H][MAX_W], player playr, NME *ogres, int numNMES, itemType exitTile){
@@ -125,18 +131,19 @@ int setNMES (NME *ogres, char level[MAX_H][MAX_W]){
     return numOgres;
 }
 
-int setExit (itemType *item, char level[MAX_H][MAX_W]){
+int setItem (itemType *item, char key, char level[MAX_H][MAX_W]){
+    int numItems=0;
     for (int j=0;j<MAX_H;j++){
         for (int i=0;i<MAX_W;i++){
-            if (level[j][i] == 'E'){
+            if (level[j][i] == key){
                 item->x = i;
                 item->y = j;
                 item->collision = 0;
-                return 1;
+                numItems++;
             }
         }
     }
-    return 0;
+    return numItems;
 }
 
 int main(){
@@ -151,6 +158,8 @@ int main(){
     roomType rooms[MAX_ROOMS];
     int numRooms;
     itemType exitTile;
+    itemType money[MAX_MON];
+    itemType magicals[MAX_STAR];
     int showGen=0;
 
    //-----% Important Initializers %-----
@@ -209,12 +218,13 @@ int main(){
             numLvl++;
         }
         setStart (&playr, level);
-        setExit (&exitTile, level);
+        setItem (&exitTile, 'E', level);
+        setItem (magicals, '*', level);
         numNMES = setNMES (dumbOgres, level);
 
         numRooms = readRooms (rooms);
 
-        while(inp!=27 && playr.getHp()>0 && !exitTile.collision){ //primary game loop. controls player movement, enemy movement, etc
+        while((inp!=27 && playr.getHp()>0 && !exitTile.collision) || numNMES > 0){ //primary game loop. controls player movement, enemy movement, etc
             drawBoard(level, playr, dumbOgres, numNMES, exitTile);
             drawCombatMenu(dumbOgres, &numNMES, &playr, level);
             exitTile.collision = isCollision(&exitTile, &playr);
@@ -222,7 +232,6 @@ int main(){
             if (playr.getHp()<30)playr.changeHp(1);
             useInp(&playr, inp, level, dumbOgres, numNMES);
             movNMES(dumbOgres, numNMES, &playr, level, rooms, numRooms);
-
         }
         numLvl++;
     }

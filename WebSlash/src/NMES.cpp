@@ -13,6 +13,8 @@
 #define RAND_WANDER 4 //ogres will wander every 1 in RAND_WANDER movement turns (a movement turn is every other turn)
 #define NME_BASE_ATK 12
 #define NME_MIN_ATK 1
+#define POINTS_MIN 100
+#define POINTS_MAX 200
 
 //-----% Random Function %-------
 int randBetween (int min, int max)
@@ -53,7 +55,7 @@ int movPlayr (player *playr, int inp, char level[MAX_H][MAX_W], NME *ogres, int 
         case (UP_ARROW_KEY):
             if (level[playr->getY()-1][playr->getX()] != '#' && level[playr->getY()-1][playr->getX()] != 'o'){
                 if (level[playr->getY()-1][playr->getX()] == '*') addRandToInv(rb(1,2));
-                else if (level[playr->getY()-1][playr->getX()] == '$') playr->addPoints(rb(1,1000));
+                else if (level[playr->getY()-1][playr->getX()] == '$') playr->addPoints(rb(POINTS_MIN,POINTS_MAX));
 
                 playr->movePlayer(0,-1);
                 return 1;
@@ -65,7 +67,7 @@ int movPlayr (player *playr, int inp, char level[MAX_H][MAX_W], NME *ogres, int 
         case (DOWN_ARROW_KEY):
             if (level[playr->getY()+1][playr->getX()] != '#' && level[playr->getY()+1][playr->getX()] != 'o'){
                 if (level[playr->getY()+1][playr->getX()] == '*') addRandToInv(rb(1,2));
-                else if (level[playr->getY()+1][playr->getX()] == '$') playr->addPoints(rb(1,1000));
+                else if (level[playr->getY()+1][playr->getX()] == '$') playr->addPoints(rb(POINTS_MIN,POINTS_MAX));
 
                 playr->movePlayer(0,1);
                 return 1;
@@ -78,7 +80,7 @@ int movPlayr (player *playr, int inp, char level[MAX_H][MAX_W], NME *ogres, int 
         case (RIGHT_ARROW_KEY):
             if (level[playr->getY()][playr->getX()+1] != '#' && level[playr->getY()][playr->getX()+1] != 'o'){
                 if (level[playr->getY()][playr->getX()+1] == '*')addRandToInv(rb(1,2));
-                else if (level[playr->getY()][playr->getX()+1] == '$') playr->addPoints(rb(1,1000));
+                else if (level[playr->getY()][playr->getX()+1] == '$') playr->addPoints(rb(POINTS_MIN,POINTS_MAX));
 
                 playr->movePlayer(1,0);
                 return 1;
@@ -91,7 +93,7 @@ int movPlayr (player *playr, int inp, char level[MAX_H][MAX_W], NME *ogres, int 
         case (LEFT_ARROW_KEY):
             if (level[playr->getY()][playr->getX()-1] != '#' && level[playr->getY()][playr->getX()-1] != 'o'){
                 if (level[playr->getY()][playr->getX()-1] == '*') addRandToInv(rb(1,2));
-                else if (level[playr->getY()][playr->getX()-1] == '$')playr->addPoints(rb(1,1000));
+                else if (level[playr->getY()][playr->getX()-1] == '$')playr->addPoints(rb(POINTS_MIN,POINTS_MAX));
 
                 playr->movePlayer(-1,0);
                 return 1;
