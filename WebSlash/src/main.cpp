@@ -72,7 +72,7 @@ void drawPlayer (char level[MAX_H][MAX_W], player playr){
 }
 
 void printMenu(){
-    printf("\t\t\t Menu:\n Inventory: i \tExit   Game: esc");
+    printf("\t\t\t Menu:\n Inventory: i \tExit   Game: esc\t Heal for 1k points : h");
 }
 
 int drawBoard(char level[MAX_H][MAX_W], player playr, NME *ogres, int numNMES, itemType exitTile){
