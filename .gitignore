@@ -51,3 +51,5 @@ lvl.txt
 *.h.gch
 
 
+WebSlash/src/obj/Release/NMES.o
+WebSlash/src/obj/Release/main.o

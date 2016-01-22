@@ -8,13 +8,16 @@
 #include "NMES.h"
 
 #define MAX_ROOMS 10
-#define RAND_WANDER 3 //ogres will wander every 1 in RAND_WANDER movement turns (a movement turn is every other turn)
+#define RAND_WANDER 4 //ogres will wander every 1 in RAND_WANDER movement turns (a movement turn is every other turn)
+#define NME_BASE_ATK 10
 
+//-----% Random Function %-------
 int randBetween (int min, int max)
 {
 	return rand() % (max - min + 1) + min;
 }
 
+//-----% loads the room data from a text file %-------
 int readRooms(roomType *rooms){
     FILE *roomCoords;
     int i=0;
@@ -25,6 +28,7 @@ int readRooms(roomType *rooms){
     return i; //returns # of rooms in file
 }
 
+//-----% function that determine which room an entity is in %-------
 int inWhichRoomXY(roomType *rooms, int numRooms, int x, int y){
     for (int i=0;i<numRooms;i++)
         if (x >= rooms[i].x1 && y >= rooms[i].y1 && x <= rooms[i].x2 && y <= rooms[i].y2)
@@ -32,59 +36,66 @@ int inWhichRoomXY(roomType *rooms, int numRooms, int x, int y){
     return -1;
 }
 
-int inWhichRoomO(roomType *rooms, int numRooms, NME *ogre){
-    for (int i=0;i<numRooms;i++)
-        if (ogre->x >= rooms[i].x1 && ogre->y >= rooms[i].y1 && ogre->x <= rooms[i].x2 && ogre->y <= rooms[i].y2)
-            return i;
-    return -1;
-}
-
-int inWhichRoomP(roomType *rooms, int numRooms, player *playr){
-    for (int i=0;i<numRooms;i++)
-        if (playr->getX() >= rooms[i].x1 && playr->getY() >= rooms[i].y1 && playr->getX() <= rooms[i].x2 && playr->getY() <= rooms[i].y2)
-            return i;
-    return -1;
-}
-
 int inSameRoom(roomType *rooms, int numRooms, NME *ogre, player *playr){
-    if (inWhichRoomP(rooms, numRooms, playr) == inWhichRoomO(rooms, numRooms, ogre)
-    && inWhichRoomO(rooms, numRooms, ogre) != -1)
+    if (inWhichRoomXY(rooms, numRooms, playr->getX(), playr->getY()) == inWhichRoomXY(rooms, numRooms, ogre->x, ogre->y)
+    && inWhichRoomXY(rooms, numRooms, ogre->x, ogre->y) != -1)
         return 1;
     return 0;
 }
 
-int movPlayr (player *playr, int inp, char level[MAX_H][MAX_W]){
+//-----% Functions that move entities %-------
+int movPlayr (player *playr, int inp, char level[MAX_H][MAX_W], NME *ogres, int numNMES){
     level[playr->getY()][playr->getX()] = ' ';
     switch(inp){
         case (UP_ARROW_KEY):
-            if (level[playr->getY()-1][playr->getX()] != '#' && level[playr->getY()-1][playr->getX()] != 'o'){
-                playr->movePlayer(0,-1);
-                return 1;
+            if (level[playr->getY()-1][playr->getX()] != '#'){
+                if (level[playr->getY()-1][playr->getX()] != 'o'){
+                    playr->movePlayer(0,-1);
+                    return 1;
+                }
+                else if (level[playr->getY()-1][playr->getX()] == 'o'){
+                    playerAttackNME(playr, &ogres[whichOgreXY(ogres, numNMES, playr->getX(), playr->getY()-1)]);
+                }
             }
             break;
         case (DOWN_ARROW_KEY):
-            if (level[playr->getY()+1][playr->getX()] != '#' && level[playr->getY()+1][playr->getX()] != 'o'){
-                playr->movePlayer(0,1);
-                return 1;
+            if (level[playr->getY()+1][playr->getX()] != '#'){
+                if (level[playr->getY()+1][playr->getX()] != 'o'){
+                    playr->movePlayer(0,1);
+                    return 1;
+                }
+                else if (level[playr->getY()+1][playr->getX()] == 'o'){
+                    playerAttackNME(playr, &ogres[whichOgreXY(ogres, numNMES, playr->getX(), playr->getY()+1)]);
+                }
             }
             break;
         case (RIGHT_ARROW_KEY):
-            if (level[playr->getY()][playr->getX()+1] != '#' && level[playr->getY()][playr->getX()+1] != 'o'){
-                playr->movePlayer(1,0);
-                return 1;
+            if (level[playr->getY()][playr->getX()+1] != '#'){
+                if (level[playr->getY()][playr->getX()+1] != 'o'){
+                    playr->movePlayer(1,0);
+                    return 1;
+                }
+                else if (level[playr->getY()][playr->getX()+1] == 'o'){
+                    playerAttackNME(playr, &ogres[whichOgreXY(ogres, numNMES, playr->getX()+1, playr->getY())]);
+                }
             }
             break;
         case (LEFT_ARROW_KEY):
-            if (level[playr->getY()][playr->getX()-1] != '#' && level[playr->getY()][playr->getX()-1] != 'o'){
-                playr->movePlayer(-1,0);
-                return 1;
+            if (level[playr->getY()][playr->getX()-1] != '#'){
+                if (level[playr->getY()][playr->getX()-1] != 'o'){
+                    playr->movePlayer(-1,0);
+                    return 1;
+                }
+                else if (level[playr->getY()][playr->getX()-1] == 'o'){
+                    playerAttackNME(playr, &ogres[whichOgreXY(ogres, numNMES, playr->getX()-1, playr->getY())]);
+                }
             }
             break;
     }
     return 0;
 }
 
-int movChar (NME *player, int inp, char level[MAX_H][MAX_W]){
+int movChar (NME *player, int inp, char level[MAX_H][MAX_W]){ //takes an input direction and moves an entity in that direction
     level[player->y][player->x] = ' ';
     switch(inp){
         case (UP_ARROW_KEY):
@@ -115,7 +126,7 @@ int movChar (NME *player, int inp, char level[MAX_H][MAX_W]){
     return 0;
 }
 
-int wanderNME (NME *ogre, char level[MAX_H][MAX_W], roomType *rooms, int numRooms){
+int wanderNME (NME *ogre, char level[MAX_H][MAX_W], roomType *rooms, int numRooms){ //function that controls the random wandering of the enemies
     if (randBetween(1,RAND_WANDER) == 1){
         switch (randBetween(1,4)){ //1 is up, 2 is down, 3 is left, 4 is right
             case 1 : //up
@@ -139,7 +150,7 @@ int wanderNME (NME *ogre, char level[MAX_H][MAX_W], roomType *rooms, int numRoom
     return 0;
 }
 
-int movNME (NME *ogre, player *playr, char level[MAX_H][MAX_W], roomType *rooms, int numRooms){
+int movNME (NME *ogre, player *playr, char level[MAX_H][MAX_W], roomType *rooms, int numRooms){ //determines the postition of the player relative to that of the enemy, then moves towards the player
 
     if(abs(ogre->x-playr->getX()) > abs(ogre->y-playr->getY())){
         if (ogre->x - playr->getX() > 1 && (inWhichRoomXY(rooms, numRooms, ogre->x-1, ogre->y) != -1)){
@@ -159,7 +170,7 @@ int movNME (NME *ogre, player *playr, char level[MAX_H][MAX_W], roomType *rooms,
     }
 }
 
-void movNMES (NME *ogres, int numNMES, player *playr, char level[MAX_H][MAX_W], roomType rooms[MAX_ROOMS], int numRooms){
+void movNMES (NME *ogres, int numNMES, player *playr, char level[MAX_H][MAX_W], roomType rooms[MAX_ROOMS], int numRooms){ //tells enemies to follow the player if they are in the same room, else tells them to wander
     for (int i=0;i<numNMES;i++){
         if (ogres[i].toMove == 1){
             if (inSameRoom(rooms, numRooms, &ogres[i], playr)){
@@ -172,19 +183,57 @@ void movNMES (NME *ogres, int numNMES, player *playr, char level[MAX_H][MAX_W], 
     }
 }
 
-int nextToAnyOgreXY (int playerX, int playerY, NME *ogres, int numNMES){
-    for (int i=0;i<numNMES;i++){
-        if ((abs(playerX - ogres[i].x) <= 1 && playerY - ogres[i].y == 0) ||
-            (playerX - ogres[i].x == 0 && abs(playerY - ogres[i].y) <= 1)){
+//-----% Functions that determine the player's position relative to an ogre %-------
+int nextToOgre (int playerX, int playerY, NME *ogre){
+    if (((abs(playerX - ogre->x) <= 1 && playerY - ogre->y == 0) ||
+            (playerX - ogre->x == 0 && abs(playerY - ogre->y) <= 1)))
             return 1;
-        }
-    }
     return 0;
 }
 
-void drawCombatMenu (NME *ogres, int numNMES, player *playr){
+int nextToWhichOgre (int playerX, int playerY, NME *ogres, int numNMES){
+    for (int i=0;i<numNMES;i++){
+        if (nextToOgre(playerX, playerY, &ogres[i])) return i;
+    }
+    return -1;
+}
+
+int whichOgreXY(NME *ogres, int numNMES, int x, int y){ //takes a pair of coords and returns the ogre in that position
+    for (int i=0;i<numNMES;i++)
+        if (ogres[i].x == x && ogres[i].y == y) return i;
+    return -1;
+}
+
+//-----% Attack functions %-------
+int playerAttackNME (player *playr, NME *ogre){
+    ogre->hp = ogre->hp - playr->getAtk();
+    return playr->getAtk();
+}
+
+int NMEAttackPlayer (NME *ogre, player *playr){
+    playr->changeHp(-(NME_BASE_ATK-playr->getDef()));
+    return NME_BASE_ATK-playr->getDef();
+}
+
+//-----% Functions that deal with death %-------
+int ogreDeath (NME *ogres, int death, int *numNMES){
+    for (int i=death;i<*numNMES-1;i++){
+        ogres[i] = ogres[i+1];
+    }
+    *numNMES = *numNMES - 1;
+    printf ("Ogre has been slain.\n");
+    return 1;
+}
+
+void drawCombatMenu (NME *ogres, int *numNMES, player *playr, char level[MAX_H][MAX_W]){
     printf ("%\n");
-    if (nextToAnyOgreXY(playr->getX(), playr->getY(), ogres, numNMES)){
-        printf("move towards ogre to attack");
+    for (int i=0;i<*numNMES;i++){
+        if (ogres[i].hp <= 0){
+            level[ogres[i].y][ogres[i].x] = ' ';
+            ogreDeath(ogres, i, numNMES);
+        }
+        if (nextToOgre(playr->getX(), playr->getY(), &ogres[i])){
+            printf("Ogre attacks for %i\n",NMEAttackPlayer (&ogres[nextToWhichOgre(playr->getX(), playr->getY(), ogres, *numNMES)], playr));
+        }
     }
 }

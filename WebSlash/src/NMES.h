@@ -33,12 +33,14 @@ typedef struct{
     int y2;
 }roomType;
 
+int movPlayr (player*, int, char level[MAX_H][MAX_W], NME*, int);
 int movChar(NME*, int, char[MAX_H][MAX_W]);
 int movNME(NME*, NME*, char[MAX_H][MAX_W]);
 int readRooms(roomType*);
-int nextToOgreXY (int, int, NME*, int);
+int nextToWhichOgre (int, int, NME*, int);
+int whichOgreXY(NME*, int, int, int);
 void movNMES(NME*, int, player*, char[MAX_H][MAX_W], roomType rooms[MAX_ROOMS], int);
-int movPlayr (player*, int, char level[MAX_H][MAX_W]);
-void drawCombatMenu (NME*, int, player*);
+int playerAttackNME (player*, NME*);
+void drawCombatMenu (NME*, int*, player*, char[MAX_H][MAX_W]);
 
 #endif // NMES_H

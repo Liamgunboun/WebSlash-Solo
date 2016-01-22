@@ -36,11 +36,11 @@ int readLevel( char level[MAX_H][MAX_W]){
 }
 
 void saveLvl(char level[MAX_H][MAX_W]){
-	FILE *lvlFile;
-	lvlFile = fopen("../lvlFiles/lvl.txt","w");
-	for (int i = 0; i < MAX_H; i++){
+    FILE *lvlFile;
+    lvlFile = fopen("../lvlFiles/lvl.txt","w");
+    for (int i = 0; i < MAX_H; i++){
             fprintf(lvlFile,"%s\n",level[i]);
-		}
+        }
     fclose(lvlFile);
 }
 
@@ -77,9 +77,9 @@ int drawBoard(char level[MAX_H][MAX_W], player playr, NME *ogres, int numNMES){
     return 1;
 }
 
-int useInp(player *playr, int inp, char level[MAX_H][MAX_W]){
+int useInp(player *playr, int inp, char level[MAX_H][MAX_W], NME *ogres, int numNMES){
     if (inp == 224)
-        movPlayr(playr, getch(), level);
+        movPlayr(playr, getch(), level, ogres, numNMES);
     else if (inp == 'i'){
         dispInv(playr);
     }
@@ -129,14 +129,14 @@ int main(){
     int numRooms;
 
    //-----% Important Initializers %-----
-	srand(time(NULL));
+    srand(time(NULL));
 
-	HWND console = GetConsoleWindow();
-  	RECT r;
- 	GetWindowRect(console, &r);
-	MoveWindow(console, r.left, r.top, 1280, 720, TRUE);
-	SetWindowText(console,"Web Slash v0.05");
-	//------------------------------------
+    HWND console = GetConsoleWindow();
+    RECT r;
+    GetWindowRect(console, &r);
+    MoveWindow(console, r.left, r.top, 1280, 720, TRUE);
+    SetWindowText(console,"Web Slash v0.05");
+    //------------------------------------
 
 
 
@@ -151,12 +151,14 @@ int main(){
         genNewLvl(&levl);
         writeToFile(&levl);
         initInv();
-        addRandToInv();
+        makeStartInv();
         playr.setAtkBon(0);
         playr.setDefBon(0);
         playr.setAtk(BASE_ATK);
         playr.setDef(BASE_DEF);
         playr.setHp(30);
+    } else if (inp == 'c'){
+        playr.readPlayer();
     }
 
     if(!readLevel(level)){
@@ -169,15 +171,16 @@ int main(){
     }
 
     setStart (&playr, level);
+
     numNMES = setNMES (dumbOgres, level);
 
     numRooms = readRooms (rooms);
 
     while(inp!=27){
-		drawBoard(level, playr, dumbOgres, numNMES);
-		drawCombatMenu(dumbOgres, numNMES, &playr);
+        drawBoard(level, playr, dumbOgres, numNMES);
+        drawCombatMenu(dumbOgres, &numNMES, &playr, level);
         inp=getch();
-        useInp(&playr, inp, level);
+        useInp(&playr, inp, level, dumbOgres, numNMES);
         movNMES(dumbOgres, numNMES, &playr, level, rooms, numRooms);
     }
 
@@ -186,6 +189,7 @@ int main(){
     inp=getch();
     if (inp == 'y'){
         saveLvl(level);
+        playr.savePlayer();
         printf("\n\n\n\t\t\tLevel Saved!\n\n\n\n\n");
         getch();
     }
