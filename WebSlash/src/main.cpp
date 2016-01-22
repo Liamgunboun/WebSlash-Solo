@@ -10,6 +10,7 @@
 #include "LevelGen.h"
 #include "inv.h"
 #include "plyr.h"
+#include "specTiles.h"
 
 #define MAX_H 40
 #define MAX_W 60
@@ -50,6 +51,10 @@ void drawNMES (char level[MAX_H][MAX_W], NME *ogres, int numNMES){
     }
 }
 
+void drawExit (char level[MAX_H][MAX_W], itemType item){
+    level[item.y][item.x] = 'E';
+}
+
 void drawPlayer (char level[MAX_H][MAX_W], player playr){
     level[playr.getY()][playr.getX()] = '&';
 }
@@ -58,8 +63,9 @@ void printMenu(){
     printf("\t\t\t Menu:\n Inventory: i \tExit Game: esc\t Character Sheet: c");
 }
 
-int drawBoard(char level[MAX_H][MAX_W], player playr, NME *ogres, int numNMES){
+int drawBoard(char level[MAX_H][MAX_W], player playr, NME *ogres, int numNMES, itemType exitTile){
     system("CLS");
+    drawExit (level, exitTile);
     drawNMES (level, ogres, numNMES);
     drawPlayer(level, playr);
 
@@ -115,7 +121,19 @@ int setNMES (NME *ogres, char level[MAX_H][MAX_W]){
     return numOgres;
 }
 
-
+int setExit (itemType *item, char level[MAX_H][MAX_W]){
+    for (int j=0;j<MAX_H;j++){
+        for (int i=0;i<MAX_W;i++){
+            if (level[j][i] == 'E'){
+                item->x = i;
+                item->y = j;
+                item->collision = 0;
+                return 1;
+            }
+        }
+    }
+    return 0;
+}
 
 int main(){
 
@@ -124,9 +142,11 @@ int main(){
     int numNMES;
     int inp = 0;
     lvl levl;
+    int numLvl=0;
     char level[MAX_H][MAX_W];
     roomType rooms[MAX_ROOMS];
     int numRooms;
+    itemType exitTile;
 
    //-----% Important Initializers %-----
     srand(time(NULL));
@@ -171,18 +191,27 @@ int main(){
         }
     }
 
-    setStart (&playr, level);
+    while (inp!=27 && playr.getHp()>0){ //loop that generates new rooms when one is completed
+        if (numLvl){
+            genNewLvl(&levl);
+            writeToFile(&levl);
+            readLevel(level);
+            numLvl++;
+        }
+        setStart (&playr, level);
+        setExit (&exitTile, level);
+        numNMES = setNMES (dumbOgres, level);
 
-    numNMES = setNMES (dumbOgres, level);
+        numRooms = readRooms (rooms);
 
-    numRooms = readRooms (rooms);
-
-    while(inp!=27 && playr.getHp()>0){
-        drawBoard(level, playr, dumbOgres, numNMES);
-        drawCombatMenu(dumbOgres, &numNMES, &playr, level);
-        inp=getch();
-        useInp(&playr, inp, level, dumbOgres, numNMES);
-        movNMES(dumbOgres, numNMES, &playr, level, rooms, numRooms);
+        while(inp!=27 && playr.getHp()>0 && !exitTile.collision){ //primary game loop. controls player movement, enemy movement, etc
+            drawBoard(level, playr, dumbOgres, numNMES, exitTile);
+            drawCombatMenu(dumbOgres, &numNMES, &playr, level);
+            inp=getch();
+            useInp(&playr, inp, level, dumbOgres, numNMES);
+            movNMES(dumbOgres, numNMES, &playr, level, rooms, numRooms);
+            exitTile.collision = isCollision(&exitTile, &playr);
+        }
     }
 
     system("CLS");
