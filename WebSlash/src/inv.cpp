@@ -120,9 +120,9 @@ int equipItem (player *playr, int itemNum){
         } else {
             if (fgets(invBuff, MAX_NAME_LEN-1,invFile) != NULL){
                 sscanf(invBuff, "%s %i %i %i %i",invBuff_Name, &atk, &def, &eqFlag,&itemClass);
-                if(itemClass == WEAPON_FLAG && !eqFlag && alreadyEquipped(WEAPON_FLAG)){
+                if(itemClass == WEAPON_FLAG && !eqFlag && !alreadyEquipped(WEAPON_FLAG)){
                     playr->addAtkBon(atk);
-                } else if (itemClass == ARMOR_FLAG && !eqFlag && alreadyEquipped(ARMOR_FLAG)){
+                } else if (itemClass == ARMOR_FLAG && !eqFlag && !alreadyEquipped(ARMOR_FLAG)){
                     playr->addDefBon(def);
                 }
                 sprintf(invBuff,"%s %i %i %i %i",invBuff_Name, atk, def, 1, itemClass);
@@ -242,11 +242,11 @@ void dispInv (player *playr){
     }
 
     system("cls");
-    printf("\t\t\t Inventory\n_____________________________________________________________________\n\tItem Name\n");
+    printf("\t\t\t Inventory \n_____________________________________________________________________\n\t\tItem Name\n");
     for(int i = 0; i < MAX_HOARD; i++){
         if (fgets(invBuff, MAX_NAME_LEN-1,invFile) != NULL){
             sscanf(invBuff, "%s %i %i", invBuff_Name, &invBuffAtk, &invBuffDef);
-            printf("%c - %s \n", 'a'+i, invBuff_Name);
+            printf("%c - %s \t ATK %i\t DEF %i\n", 'a'+i, invBuff_Name, invBuffAtk, invBuffDef);
         }
         else
             exit;
@@ -279,6 +279,7 @@ const char* weaponNameGen(char *itemName, int itemClass, int max_atk){
         sprintf(itemName,"%s-of-%s %i %i", prefix[7], suffix[rb(0,7)], rb(1,max_atk), 0);
         return itemName;
     }
+    return "error";
 }
 
 const char* armorNameGen(char *itemName, int itemClass, int max_def){
@@ -301,6 +302,7 @@ const char* armorNameGen(char *itemName, int itemClass, int max_def){
         sprintf(itemName,"%s-of-%s %i %i", prefix[rb(10,11)], suffix[rb(0,6)], 0, rb(1,max_def));
         return itemName;
     }
+    return "error";
 }
 
 

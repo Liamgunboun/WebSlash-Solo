@@ -1,2 +1,2 @@
-Staff-of-Badassery 2 0 0 1
-Cuirass-of-Protection 0 2 0 2
+Blade-of-Your-Mother 1 0 0 1
+Cap-of-Darkness 0 1 0 2

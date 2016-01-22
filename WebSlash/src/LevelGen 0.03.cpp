@@ -1,3 +1,13 @@
+/*******************************************************************
+
+        Xander May's randomly freezing random level generation
+
+The freezing is most likely due to the count of 'try' going over the
+  allowed number and not knowing what to do despite my best efforts.
+
+*******************************************************************/
+
+
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,7 +30,7 @@
 #define MAX_ROOMS 10
 
 
-int lvlGen(lvl *level, int);
+int lvlGen(lvl *level, int); //Declaring later functions
 int rb (int min, int max);
 void drawBoard(lvl *level);
 void writeToFile (lvl *level);
@@ -58,6 +68,7 @@ int room::y2Get(){
 	return (y2);
 }
 
+//This is used to grab the points for the ogre functions later on.
 void room::setPoints(int x1s, int y1s, int x2s, int y2s){
 	x1 = x1s;
 	x2 = x2s;
@@ -66,6 +77,8 @@ void room::setPoints(int x1s, int y1s, int x2s, int y2s){
 }
 
 //-----% Room Generation Functions %------
+
+//Recursively clear the allotted space for each room
 int recurClear(lvl *level, int h, int w, int x, int y, int doH, int showGen){
 
 	if (h && doH == 1) recurClear(level, h-1, w, x, y,1, showGen);
@@ -92,6 +105,7 @@ int recurClear(lvl *level, int h, int w, int x, int y, int doH, int showGen){
 	return 1;
 }
 
+//Make sure the level has the desired qualities
 int validLevel(lvl *level){
 	int count = 0;
 	for (int i=1; i <= MAX_H; i++){
@@ -104,7 +118,7 @@ int validLevel(lvl *level){
 	return 0;
 }
 
-
+//Make sure it does not intersect with any other rooms
 int validRoom(lvl *level, int h, int w, int x, int y, int doH, int showGen){
 	for (int i=1; i <= h+1; i++){
 		for (int j=1; j <= w+1; j++){
@@ -114,6 +128,7 @@ int validRoom(lvl *level, int h, int w, int x, int y, int doH, int showGen){
 	return 1;
 }
 
+//Generate the paths between rooms
 void genPath(lvl *level, int x1, int y1, int x2, int y2){
 
 	while (x1!=x2 || y1!=y2){
@@ -134,7 +149,11 @@ void genPath(lvl *level, int x1, int y1, int x2, int y2){
 	}
 }
 
-//
+//This is used to create a new room. This is where the freezing comes from.
+//If we had more time im sure I could fix it. If a room fails to create then
+//it will crash...
+//Increasing the amount of tries decreased failure rate but wil put a larger load on the
+//system and caused some school computers to crash.
 int addRoom(lvl *level, int showGen, room *rooms, int tries){
 	int x = rb(1, MAX_W-RM_MAXX-2);
 	int y = rb(1, MAX_H-RM_MAXY-2);
@@ -146,7 +165,7 @@ int addRoom(lvl *level, int showGen, room *rooms, int tries){
 		recurClear(level, h, w, x, y, 1, showGen);
 		return (1);
 	}
-	else if(tries<=30){
+	else if(tries<=50){
 		return (addRoom(level, showGen, rooms, ++tries));
 	}
 	return 0;
@@ -154,13 +173,12 @@ int addRoom(lvl *level, int showGen, room *rooms, int tries){
 
 
 //-----------------------------------------------------------------
+//  This is what is called in the main file when it wants to create
+//a new level for the player.
 int genNewLvl(lvl *level, int showgen){
-
 	lvlGen(level, showgen);
-
 	drawBoard(level);
 	writeToFile(level);
-
 	return 0;
 }
 

@@ -193,6 +193,7 @@ int main(){
         makeStartInv();
         playr.setAtkBon(0);
         playr.setDefBon(0);
+        playr.addPoints(-playr.getPoints());
         playr.setAtk(BASE_ATK);
         playr.setDef(BASE_DEF);
         playr.setHp(30);

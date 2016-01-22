@@ -1,3 +1,14 @@
+/*******************************************************************
+
+                    Player getters and setters
+
+These are all the functions used to get and set all of the values
+asociated with the player. The names of the functions explain pretty
+well what they do.
+
+
+*******************************************************************/
+
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
