@@ -8,9 +8,6 @@
 
 int isCollision (itemType *item, player *playr){
     if (item->x == playr->getX() && item->y == playr->getY()){
-
-        printf ("yes\n");
-        system ("PAUSE");
         return 1;
     }
     return 0;
