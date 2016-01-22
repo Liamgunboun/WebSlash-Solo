@@ -45,7 +45,7 @@ class room{
 };
 
 
-int genNewLvl(lvl*);
+int genNewLvl(lvl*, int);
 int rb (int min, int max);
 void writeToFile(lvl*);
 void writeCoords(room*, int);

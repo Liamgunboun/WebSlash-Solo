@@ -20,7 +20,7 @@
 #define MAX_ROOMS 10
 
 
-int lvlGen(lvl *level);
+int lvlGen(lvl *level, int);
 int rb (int min, int max);
 void drawBoard(lvl *level);
 void writeToFile (lvl *level);
@@ -154,9 +154,9 @@ int addRoom(lvl *level, int showGen, room *rooms, int tries){
 
 
 //-----------------------------------------------------------------
-int genNewLvl(lvl *level){
+int genNewLvl(lvl *level, int showgen){
 
-	lvlGen(level);
+	lvlGen(level, showgen);
 
 	drawBoard(level);
 	writeToFile(level);
@@ -165,10 +165,9 @@ int genNewLvl(lvl *level){
 }
 
 //-----% Generate The Level %-------
-int lvlGen (lvl *level){
+int lvlGen (lvl *level, int showGen){
 	int numRooms = rb(MIN_ROOMS,MAX_ROOMS);
 	char temp;
-	int showGen = 0;
 	int x1,x2,y1,y2;
 	room rooms[numRooms];
 
@@ -179,11 +178,7 @@ int lvlGen (lvl *level){
 		}
 	}
 
-	printf("\t\tBefore playing a new level must be generated \n \t\tDo you want to be shown the generation process? y/n \n\t\t(warning, a lot of flashing will occur)\n\n ");
-	printf("\t\t(Also due to some hidden bug, this will fail 1/10 times)\n");
-	printf("\t\t(If it happens just restart the program and all will be well)\n");
-	temp=getch();
-	if (temp == 'y') showGen = 1;
+
 
 	while (!validLevel(level)){
 		for (int i = 0; i < MAX_H; i++){

@@ -1,2 +1,2 @@
-Dagger-of-Fortitude 1 0 0 1
-Robe-of-Fortitude 0 1 0 2
+Staff-of-w 2 0 0 1
+Robe-of-Protection 0 1 0 2

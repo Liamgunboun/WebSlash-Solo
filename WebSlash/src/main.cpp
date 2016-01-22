@@ -147,6 +147,7 @@ int main(){
     roomType rooms[MAX_ROOMS];
     int numRooms;
     itemType exitTile;
+    int showGen=0;
 
    //-----% Important Initializers %-----
     srand(time(NULL));
@@ -168,7 +169,12 @@ int main(){
     }
 
     if (inp == 'n'){
-        genNewLvl(&levl);
+        printf("\t\tBefore playing a new level must be generated \n \t\tDo you want to be shown the generation process? y/n \n\t\t(warning, a lot of flashing will occur)\n\n ");
+        printf("\t\t(Also due to some hidden bug, this will fail 1/10 times)\n");
+        printf("\t\t(If it happens just restart the program and all will be well)\n");
+        inp=getch();
+        if (inp == 'y') showGen = 1;
+        genNewLvl(&levl, showGen);
         writeToFile(&levl);
         initInv();
         makeStartInv();
@@ -178,9 +184,9 @@ int main(){
         playr.setDef(BASE_DEF);
         playr.setHp(30);
         playr.setAlive();
-    } else if (inp == 'c'){
-        playr.readPlayer();
-    }
+        } else if (inp == 'c'){
+            playr.readPlayer();
+        }
 
     if(!readLevel(level)){
         printf("\t    No existing level found, generate one now? y/n \n\n");
@@ -193,7 +199,7 @@ int main(){
 
     while (inp!=27 && playr.getHp()>0){ //loop that generates new rooms when one is completed
         if (numLvl){
-            genNewLvl(&levl);
+            genNewLvl(&levl,0);
             writeToFile(&levl);
             readLevel(level);
             numLvl++;
@@ -207,11 +213,13 @@ int main(){
         while(inp!=27 && playr.getHp()>0 && !exitTile.collision){ //primary game loop. controls player movement, enemy movement, etc
             drawBoard(level, playr, dumbOgres, numNMES, exitTile);
             drawCombatMenu(dumbOgres, &numNMES, &playr, level);
+            exitTile.collision = isCollision(&exitTile, &playr);
             inp=getch();
             useInp(&playr, inp, level, dumbOgres, numNMES);
             movNMES(dumbOgres, numNMES, &playr, level, rooms, numRooms);
-            exitTile.collision = isCollision(&exitTile, &playr);
+
         }
+        numLvl++;
     }
 
     system("CLS");

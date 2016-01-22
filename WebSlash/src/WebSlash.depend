@@ -63,7 +63,7 @@
 	<time.h>
 	<windows.h>
 
-1452917379 source:c:\users\admin\documents\github\webslash-solo\webslash\src\levelgen 0.03.cpp
+1453437539 source:c:\users\admin\documents\github\webslash-solo\webslash\src\levelgen 0.03.cpp
 	<string.h>
 	<stdio.h>
 	<stdlib.h>
@@ -72,7 +72,7 @@
 	<windows.h>
 	"LevelGen.h"
 
-1452971948 c:\users\admin\documents\github\webslash-solo\webslash\src\levelgen.h
+1453437516 c:\users\admin\documents\github\webslash-solo\webslash\src\levelgen.h
 	<string.h>
 	<stdio.h>
 	<stdlib.h>
@@ -80,7 +80,7 @@
 	<time.h>
 	<windows.h>
 
-1453431895 source:c:\users\admin\documents\github\webslash-solo\webslash\src\main.cpp
+1453437558 source:c:\users\admin\documents\github\webslash-solo\webslash\src\main.cpp
 	<string.h>
 	<stdio.h>
 	<stdlib.h>
@@ -92,6 +92,7 @@
 	"LevelGen.h"
 	"inv.h"
 	"plyr.h"
+	"specTiles.h"
 
 1452700313 source:c:\users\administrator\documents\github\webslash-solo\webslash\src\levelgen 0.03.cpp
 	<string.h>
@@ -251,7 +252,7 @@
 	<windows.h>
 	"plyr.h"
 
-1453430813 source:c:\users\admin\documents\github\webslash-solo\webslash\src\nmes.cpp
+1453436530 source:c:\users\admin\documents\github\webslash-solo\webslash\src\nmes.cpp
 	<string.h>
 	<stdio.h>
 	<stdlib.h>
@@ -367,4 +368,22 @@
 	<Windows.h>
 	<iostream>
 	"plyr.h"
+
+1453436530 c:\users\admin\documents\github\webslash-solo\webslash\src\spectiles.h
+	<string.h>
+	<stdio.h>
+	<stdlib.h>
+	<conio.h>
+	<time.h>
+	<windows.h>
+	"plyr.h"
+
+1453437172 source:c:\users\admin\documents\github\webslash-solo\webslash\src\spectiles.cpp
+	<string.h>
+	<stdio.h>
+	<stdlib.h>
+	<conio.h>
+	<time.h>
+	<windows.h>
+	"specTiles.h"
 
