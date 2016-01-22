@@ -24,6 +24,9 @@ class player{
         void setDef(int);
         void savePlayer ();
         void readPlayer ();
+        int isAlive();
+        void setAlive();
+        void setDead();
 };
 
 

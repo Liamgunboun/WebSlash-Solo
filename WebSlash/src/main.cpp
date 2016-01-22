@@ -157,6 +157,7 @@ int main(){
         playr.setAtk(BASE_ATK);
         playr.setDef(BASE_DEF);
         playr.setHp(30);
+        playr.setAlive();
     } else if (inp == 'c'){
         playr.readPlayer();
     }
@@ -176,7 +177,7 @@ int main(){
 
     numRooms = readRooms (rooms);
 
-    while(inp!=27){
+    while(inp!=27 && playr.getHp()>0){
         drawBoard(level, playr, dumbOgres, numNMES);
         drawCombatMenu(dumbOgres, &numNMES, &playr, level);
         inp=getch();
@@ -185,14 +186,20 @@ int main(){
     }
 
     system("CLS");
-    printf("\t\tWould you like to save your game? y/n");
-    inp=getch();
-    if (inp == 'y'){
-        saveLvl(level);
-        playr.savePlayer();
-        printf("\n\n\n\t\t\tLevel Saved!\n\n\n\n\n");
+    if (playr.getHp()>0){
+        printf("\t\tWould you like to save your game? y/n");
+        inp=getch();
+        if (inp == 'y'){
+            saveLvl(level);
+            playr.savePlayer();
+            printf("\n\n\n\t\t\tLevel Saved!\n\n\n\n\n");
+            getch();
+        }
+    } else {
+        printf("Oh Dear you seem to have died . . . .");
         getch();
     }
+
 
 return 0;
 }

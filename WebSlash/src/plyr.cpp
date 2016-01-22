@@ -65,3 +65,15 @@ void player::readPlayer (){
     fscanf(playerFile,"%i %i %i %i %i %i %i",&x, &y, &hp, &atk, &def, &atkBoost, &defBoost);
     fclose(playerFile);
 }
+int player::isAlive(){
+    if (alive)
+        return 1;
+    else
+        return 0;
+}
+void player::setAlive(){
+    alive = true;
+}
+void player::setDead(){
+    alive = false;
+}

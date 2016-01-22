@@ -1,2 +1,2 @@
-Dagger-of-No-Return 3 0 0 1
-Cuirass-of-Fortitude 0 1 0 2
+Shovel-of-Fortitude 1 0 0 1
+Cuirass-of-Awesomeness 0 2 0 2
