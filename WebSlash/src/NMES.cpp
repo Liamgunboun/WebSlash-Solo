@@ -11,8 +11,9 @@
 
 #define MAX_ROOMS 10
 #define RAND_WANDER 4 //ogres will wander every 1 in RAND_WANDER movement turns (a movement turn is every other turn)
-#define NME_BASE_ATK 12
+#define NME_BASE_ATK 7
 #define NME_MIN_ATK 1
+#define NME_ATK_INC 2
 #define POINTS_MIN 100
 #define POINTS_MAX 200
 
@@ -222,10 +223,10 @@ int playerAttackNME (player *playr, NME *ogre){
     return playr->getAtk();
 }
 
-int NMEAttackPlayer (NME *ogre, player *playr){
-    if (NME_BASE_ATK-playr->getDef() > 0){
-        playr->changeHp(-(NME_BASE_ATK-playr->getDef()));
-        return NME_BASE_ATK-playr->getDef();
+int NMEAttackPlayer (NME *ogre, player *playr, int numLvl){
+    if (NME_BASE_ATK+(numLvl*NME_ATK_INC-playr->getDef()) > 0){
+        playr->changeHp(-(NME_BASE_ATK+(numLvl*NME_ATK_INC)-playr->getDef()));
+        return NME_BASE_ATK+(numLvl*NME_ATK_INC)-playr->getDef();
     }
     else {
         playr->changeHp(-NME_MIN_ATK);
@@ -243,18 +244,19 @@ int ogreDeath (NME *ogres, int death, int *numNMES){
     return 1;
 }
 
-void drawCombatMenu (NME *ogres, int *numNMES, player *playr, char level[MAX_H][MAX_W]){
+void drawCombatMenu (NME *ogres, int *numNMES, player *playr, char level[MAX_H][MAX_W], int numLvl){
     printf ("%\n");
     for (int i=0;i<*numNMES;i++){
         if (nextToOgre(playr->getX(), playr->getY(), &ogres[i])){
             if (ogres[i].toMove){
-                printf("Ogre attacks for %i\n",NMEAttackPlayer (&ogres[nextToWhichOgre(playr->getX(), playr->getY(), ogres, *numNMES)], playr));
+                printf("Ogre attacks for %i\n",NMEAttackPlayer (&ogres[nextToWhichOgre(playr->getX(), playr->getY(), ogres, *numNMES)], playr, numLvl));
             }
             printf("Ogre health: %i\n",ogres[i].hp);
         }
         if (ogres[i].hp <= 0){
             level[ogres[i].y][ogres[i].x] = ' ';
             ogreDeath(ogres, i, numNMES);
+            playr->addPoints(rb(POINTS_MIN,POINTS_MAX));
         }
     }
 }

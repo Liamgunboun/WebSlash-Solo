@@ -50,7 +50,7 @@ void player::addAtkBon(int bonus){
     atkBoost = atkBoost + bonus;
 }
 void player::addDefBon(int bonus){
-    defBoost = atkBoost + bonus;
+    defBoost = defBoost + bonus;
 }
 int player::getAtk(){
     return (atk+atkBoost);
@@ -67,13 +67,13 @@ void player::setDef(int d){
 void player::savePlayer (){
     FILE* playerFile;
     playerFile = fopen("../playerFiles/playerSave.txt","w");
-    fprintf(playerFile,"%i %i %i %i %i %i %i",x, y, hp, atk, def, atkBoost, defBoost);
+    fprintf(playerFile,"%i %i %i %i %i %i %i %i",x, y, hp, atk, def, atkBoost, defBoost, points);
     fclose(playerFile);
 }
 void player::readPlayer (){
     FILE* playerFile;
     playerFile = fopen("../playerFiles/playerSave.txt","r");
-    fscanf(playerFile,"%i %i %i %i %i %i %i",&x, &y, &hp, &atk, &def, &atkBoost, &defBoost);
+    fscanf(playerFile,"%i %i %i %i %i %i %i %i",&x, &y, &hp, &atk, &def, &atkBoost, &defBoost, &points);
     fclose(playerFile);
 }
 int player::isAlive(){

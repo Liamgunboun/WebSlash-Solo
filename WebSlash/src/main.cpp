@@ -21,6 +21,9 @@
 #define BASE_ATK 5
 #define BASE_DEF 5
 
+#define NME_BASE_HP 5
+#define NME_HP_INC 5
+
 #define MAX_NMES 10
 #define UP_ARROW_KEY 72
 #define DOWN_ARROW_KEY 80
@@ -65,11 +68,11 @@ void drawItems (char level[MAX_H][MAX_W], itemType *items, char c, int numItems)
 }
 
 void drawPlayer (char level[MAX_H][MAX_W], player playr){
-    level[playr.getY()][playr.getX()] = '&';
+    level[playr.getY()][playr.getX()] = 2;
 }
 
 void printMenu(){
-    printf("\t\t\t Menu:\n Inventory: i \tExit   Game: esc\t Character Sheet: c");
+    printf("\t\t\t Menu:\n Inventory: i \tExit   Game: esc");
 }
 
 int drawBoard(char level[MAX_H][MAX_W], player playr, NME *ogres, int numNMES, itemType exitTile){
@@ -99,7 +102,10 @@ int useInp(player *playr, int inp, char level[MAX_H][MAX_W], NME *ogres, int num
     else if (inp == 'i'){
         dispInv(playr);
     }
-
+    else if (inp == 'h' && playr->getPoints() >= 1000){
+        playr->changeHp(15);
+        playr->addPoints(-1000);
+    }
     return 1;
 };
 
@@ -107,7 +113,7 @@ int useInp(player *playr, int inp, char level[MAX_H][MAX_W], NME *ogres, int num
 int setStart (player *playr, char level[MAX_H][MAX_W]){
     for (int j=0;j<MAX_H;j++){
         for (int i=0;i<MAX_W;i++){
-            if (level[j][i] == 'e' || level[j][i] == '&'){
+            if (level[j][i] == 'e' || level[j][i] == 2){
                 playr->setPos(i,j);
             }
         }
@@ -115,14 +121,14 @@ int setStart (player *playr, char level[MAX_H][MAX_W]){
     return 1;
 }
 
-int setNMES (NME *ogres, char level[MAX_H][MAX_W]){
+int setNMES (NME *ogres, char level[MAX_H][MAX_W], int numLvl){
     int numOgres = 0;
     for (int j=0;j<MAX_H;j++){
         for (int i=0;i<MAX_W;i++){
             if (level[j][i] == 'o'){
                 ogres[numOgres].y = j;
                 ogres[numOgres].x = i;
-                ogres[numOgres].hp = 10;
+                ogres[numOgres].hp = NME_BASE_HP + (numLvl * NME_HP_INC);
                 ogres[numOgres].toMove = 1;
                 numOgres++;
             }
@@ -213,28 +219,30 @@ int main(){
 
     while (inp!=27 && playr.getHp()>0){ //loop that generates new rooms when one is completed
         if (numLvl){
+            playr.savePlayer();
+            writeToFile(&levl);
             genNewLvl(&levl,0);
             writeToFile(&levl);
             readLevel(level);
             numLvl++;
         }
+        numLvl++;
         setStart (&playr, level);
         setItem (&exitTile, 'E', level);
         setItem (magicals, '*', level);
-        numNMES = setNMES (dumbOgres, level);
+        numNMES = setNMES (dumbOgres, level, numLvl);
 
         numRooms = readRooms (rooms);
 
-        while((inp!=27 && playr.getHp()>0 && !exitTile.collision) || numNMES > 0){ //primary game loop. controls player movement, enemy movement, etc
+        while(inp!=27 && playr.getHp()>0 && (!exitTile.collision || numNMES > 0)){ //primary game loop. controls player movement, enemy movement, etc
             drawBoard(level, playr, dumbOgres, numNMES, exitTile);
-            drawCombatMenu(dumbOgres, &numNMES, &playr, level);
+            drawCombatMenu(dumbOgres, &numNMES, &playr, level, numLvl);
             exitTile.collision = isCollision(&exitTile, &playr);
             inp=getch();
-            if (playr.getHp()<30)playr.changeHp(1);
+            //if (playr.getHp()<30)playr.changeHp(1);
             useInp(&playr, inp, level, dumbOgres, numNMES);
             movNMES(dumbOgres, numNMES, &playr, level, rooms, numRooms);
         }
-        numLvl++;
     }
 
     system("CLS");

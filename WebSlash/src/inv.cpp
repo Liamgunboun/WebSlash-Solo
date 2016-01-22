@@ -12,6 +12,11 @@
 #define MAX_HOARD 50
 #define MAX_NAME_LEN 60
 
+#define MIN_WEP_ATK 5
+#define WEP_ATK_INC 1
+#define MIN_ARM_DEF 5
+#define ARM_DEF_INC 1
+
 #define WEAPON_FLAG 1
 #define ARMOR_FLAG 2
 
@@ -214,15 +219,15 @@ int invCommands (player *playr){
     if (inp == 'd'){
         printf("Which Item Do You Want to Destroy?");
         inp = getch();
-        destroyItem(inp-'a');
+        if (inp != 27) destroyItem(inp-'a');
     } else if (inp == 'e'){
         printf("Which Item Do You Want to Equip?");
         inp = getch();
-        equipItem(playr ,inp-'a');
+        if (inp != 27) equipItem(playr ,inp-'a');
     } else if (inp == 'u'){
         printf("Which Item Do You Want to UnEquip?");
         inp = getch();
-        unEquipItem(playr ,inp-'a');
+        if (inp != 27) unEquipItem(playr ,inp-'a');
     }
     return 1;
 }
@@ -321,9 +326,9 @@ void addRandToInv(int type){
     invFile = fopen("../playerFiles/playerInv.txt","a");
     char itemName[MAX_NAME_LEN];
     if (type == 1)
-    fprintf(invFile,"%s %i %i\n", weaponNameGen(itemName, rb(1,3), 5),0,WEAPON_FLAG);
+    fprintf(invFile,"%s %i %i\n", weaponNameGen(itemName, rb(1,3), MIN_WEP_ATK + 0.5 * WEP_ATK_INC),0,WEAPON_FLAG);
     else
-    fprintf(invFile,"%s %i %i\n", armorNameGen(itemName, rb(1,5), 5),0,ARMOR_FLAG);
+    fprintf(invFile,"%s %i %i\n", armorNameGen(itemName, rb(1,5), MIN_ARM_DEF + 0.5 * ARM_DEF_INC),0,ARMOR_FLAG);
 
     fclose(invFile);
 }
